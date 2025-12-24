@@ -88,7 +88,7 @@ The cosmic backdrop for the travelers' story.
 | 24 | NEBULA-RAYMARCHED | [x] | Full-screen raymarched background |
 | 25 | NEBULA-DUST | [x] | 10,000 GPU dust particles |
 | 26 | VOLUMETRIC-FOG | [x] | Exponential height fog |
-| 27 | REFLECTION-PLANE | [ ] | Planar reflection surface |
+| 27 | REFLECTION-PLANE | [x] | Planar reflection surface |
 
 **Milestone**: Immersive cosmic environment
 
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 26-VOLUMETRIC-FOG
-**Next prompt**: 27-REFLECTION-PLANE
-**Overall progress**: 26/40 (65%)
+**Last completed prompt**: 27-REFLECTION-PLANE
+**Next prompt**: 28-BANG-CORE
+**Overall progress**: 27/40 (67.5%)
