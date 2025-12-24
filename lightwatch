@@ -1,0 +1,16 @@
+#!/bin/bash
+# lightwatch - Run the LIGHTWATCH experience
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+# Check if release build exists
+if [ ! -f "target/release/lightwatch" ]; then
+    echo "Building LIGHTWATCH (release)..."
+    cargo build --release
+fi
+
+# Run
+exec ./target/release/lightwatch "$@"
