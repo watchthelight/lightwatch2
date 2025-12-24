@@ -42,8 +42,8 @@ cargo build --release
 ## Timeline
 
 ```
-0s        2s        12s       27s       57s       87s       143s
-├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
+0s        2s        12s       27s       57s       87s        143s
+├─────────┼─────────┼─────────┼─────────┼──────────┼──────────┤
 │ Signal  │  Bang   │Awakening│Discovery│Connection│Acceptance│
 ```
 

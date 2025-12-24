@@ -4,25 +4,25 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                          LIGHTWATCH                                  │
+│                          LIGHTWATCH                                 │
 ├─────────────────────────────────────────────────────────────────────┤
-│                                                                      │
+│                                                                     │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │
 │  │    Core     │  │   Visual    │  │    Audio    │  │  Narrative  │ │
 │  │   Systems   │  │   Systems   │  │   Systems   │  │   Systems   │ │
 │  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘ │
 │         │                │                │                │        │
 │         └────────────────┴────────────────┴────────────────┘        │
-│                                 │                                    │
+│                                 │                                   │
 │                          ┌──────┴──────┐                            │
 │                          │  Event Bus  │                            │
 │                          └──────┬──────┘                            │
-│                                 │                                    │
+│                                 │                                   │
 │                          ┌──────┴──────┐                            │
 │                          │    Clock    │                            │
 │                          │   System    │                            │
 │                          └─────────────┘                            │
-│                                                                      │
+│                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -189,39 +189,39 @@ struct EventQueue {
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      FRAME UPDATE                            │
+│                      FRAME UPDATE                           │
 ├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  1. Input Systems                                            │
-│     └── handle_input                                         │
-│                                                              │
-│  2. Time Systems                                             │
-│     ├── update_clock                                         │
-│     └── detect_phase_transitions                             │
-│                                                              │
-│  3. Event Systems                                            │
-│     ├── emit_phase_events                                    │
-│     └── process_events                                       │
-│                                                              │
-│  4. Simulation Systems                                       │
-│     ├── update_traveler_positions                            │
-│     ├── update_traveler_states                               │
-│     ├── calculate_connections                                │
-│     └── process_deaths                                       │
-│                                                              │
-│  5. Audio Systems                                            │
-│     ├── update_synthesis                                     │
-│     ├── update_spatial_audio                                 │
-│     └── trigger_audio_events                                 │
-│                                                              │
-│  6. Visual Systems                                           │
-│     ├── update_camera                                        │
-│     ├── update_particles                                     │
-│     ├── update_environment                                   │
-│     └── update_post_processing                               │
-│                                                              │
-│  7. Render (Bevy handles this)                               │
-│                                                              │
+│                                                             │
+│  1. Input Systems                                           │
+│     └── handle_input                                        │
+│                                                             │
+│  2. Time Systems                                            │
+│     ├── update_clock                                        │
+│     └── detect_phase_transitions                            │
+│                                                             │
+│  3. Event Systems                                           │
+│     ├── emit_phase_events                                   │
+│     └── process_events                                      │
+│                                                             │
+│  4. Simulation Systems                                      │
+│     ├── update_traveler_positions                           │
+│     ├── update_traveler_states                              │
+│     ├── calculate_connections                               │
+│     └── process_deaths                                      │
+│                                                             │
+│  5. Audio Systems                                           │
+│     ├── update_synthesis                                    │
+│     ├── update_spatial_audio                                │
+│     └── trigger_audio_events                                │
+│                                                             │
+│  6. Visual Systems                                          │
+│     ├── update_camera                                       │
+│     ├── update_particles                                    │
+│     ├── update_environment                                  │
+│     └── update_post_processing                              │
+│                                                             │
+│  7. Render (Bevy handles this)                              │
+│                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -283,41 +283,41 @@ enum LightwatchEvent {
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     RENDER STAGES                            │
+│                     RENDER STAGES                           │
 ├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  Stage 1: Background                                         │
-│  ├── Clear to black                                          │
+│                                                             │
+│  Stage 1: Background                                        │
+│  ├── Clear to black                                         │
 │  └── Render nebula (full-screen raymarched quad)            │
-│                                                              │
-│  Stage 2: Environment                                        │
+│                                                             │
+│  Stage 2: Environment                                       │
 │  ├── Render starfield (point sprites)                       │
 │  └── Render dust particles (GPU instanced)                  │
-│                                                              │
-│  Stage 3: Bang (if active)                                   │
-│  ├── Render explosion core                                   │
-│  ├── Render shockwave                                        │
-│  ├── Render debris particles                                 │
-│  └── Render god rays                                         │
-│                                                              │
-│  Stage 4: Travelers                                          │
+│                                                             │
+│  Stage 3: Bang (if active)                                  │
+│  ├── Render explosion core                                  │
+│  ├── Render shockwave                                       │
+│  ├── Render debris particles                                │
+│  └── Render god rays                                        │
+│                                                             │
+│  Stage 4: Travelers                                         │
 │  ├── Render core geometry (PBR)                             │
-│  ├── Render aura particles                                   │
-│  └── Render trail particles                                  │
-│                                                              │
-│  Stage 5: Volumetrics                                        │
-│  └── Apply volumetric fog                                    │
-│                                                              │
-│  Stage 6: Post-Processing                                    │
-│  ├── Depth of field                                          │
+│  ├── Render aura particles                                  │
+│  └── Render trail particles                                 │
+│                                                             │
+│  Stage 5: Volumetrics                                       │
+│  └── Apply volumetric fog                                   │
+│                                                             │
+│  Stage 6: Post-Processing                                   │
+│  ├── Depth of field                                         │
 │  ├── Bloom (HDR)                                            │
-│  ├── Chromatic aberration                                    │
-│  ├── Film grain                                              │
-│  └── ACES tonemapping                                        │
-│                                                              │
-│  Stage 7: UI (if any)                                        │
-│  └── Render text overlays                                    │
-│                                                              │
+│  ├── Chromatic aberration                                   │
+│  ├── Film grain                                             │
+│  └── ACES tonemapping                                       │
+│                                                             │
+│  Stage 7: UI (if any)                                       │
+│  └── Render text overlays                                   │
+│                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
