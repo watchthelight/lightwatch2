@@ -116,7 +116,7 @@ The voices of the travelers.
 
 | # | Prompt | Status | Description |
 |---|--------|--------|-------------|
-| 33 | AUDIO-SYNTHESIS | [ ] | Oscillators, filters, envelopes |
+| 33 | AUDIO-SYNTHESIS | [x] | Oscillators, filters, envelopes |
 | 34 | AUDIO-LEITMOTIFS | [ ] | Pentatonic melodies per traveler |
 | 35 | AUDIO-SPATIAL | [ ] | 3D audio positioning, reverb |
 | 36 | AUDIO-EVENTS | [ ] | Bang, grief, silence triggers |
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 32-BANG-DEBRIS
-**Next prompt**: 33-AUDIO-SYNTHESIS
-**Overall progress**: 32/40 (80%)
+**Last completed prompt**: 33-AUDIO-SYNTHESIS
+**Next prompt**: 34-AUDIO-LEITMOTIFS
+**Overall progress**: 33/40 (82.5%)
