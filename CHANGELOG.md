@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2024-12-24
+
+### Added
+- `src/core/window.rs` - Window configuration with ESC close and F11 fullscreen toggle
+- `src/core/renderer.rs` - CinematicCameraBundle with HDR, ACES tonemapping, bloom
+- `src/core/exposure.rs` - Dynamic exposure control tied to experience phases
+- Render pipeline configuration with high-performance GPU preference
+- 4x MSAA anti-aliasing
+
+### Changed
+- Updated `src/main.rs` to use new window and render configuration
+- Updated `src/core/mod.rs` to integrate new modules
+
+### Notes
+- Prompt 02-WINDOW-RENDERER complete
+- HDR enabled with ACES Filmic tonemapping
+- VSync active via AutoVsync present mode
+- Window fixed at 1920x1080, non-resizable
+
 ## [0.1.0] - 2024-12-24
 
 ### Added
@@ -60,7 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/watchthelight/lightwatch2/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/watchthelight/lightwatch2/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/watchthelight/lightwatch2/compare/v0.0.0...v0.0.1
 [0.0.0]: https://github.com/watchthelight/lightwatch2/releases/tag/v0.0.0
