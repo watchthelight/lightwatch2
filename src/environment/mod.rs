@@ -5,11 +5,13 @@ use bevy::prelude::*;
 mod dust;
 mod fog;
 mod nebula;
+mod reflection;
 mod starfield;
 
 pub use dust::*;
 pub use fog::*;
 pub use nebula::*;
+pub use reflection::*;
 pub use starfield::*;
 
 /// Environment plugin for cosmic backdrop
@@ -20,8 +22,7 @@ impl Plugin for EnvironmentPlugin {
         app.add_plugins(StarfieldPlugin)
             .add_plugins(NebulaPlugin)
             .add_plugins(DustPlugin)
-            .add_plugins(FogPlugin);
-
-        // TODO: Reflection plane
+            .add_plugins(FogPlugin)
+            .add_plugins(ReflectionPlugin);
     }
 }
