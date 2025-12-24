@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2024-12-24
+
+### Added
+- `src/camera/rig.rs` - Camera rig system
+  - CameraRig component with position/rotation offsets
+  - ExperienceCamera marker component
+  - spawn_camera with HDR, bloom, ACES tonemapping
+  - apply_rig_to_transform for frame updates
+- `src/camera/breathing.rs` - Organic breathing motion
+  - BreathingConfig with dual-frequency parameters
+  - update_breathing system for subtle sway
+- `src/camera/config.rs` - Camera configuration resource
+- CameraPlugin fully implemented
+
+### Notes
+- Prompt 11-CAMERA-RIG complete
+- Phase 3 (Camera) begun
+- Camera breathes with organic dual-frequency motion
+
 ## [0.2.4] - 2024-12-24
 
 ### Added
@@ -255,7 +274,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.2.4...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/watchthelight/lightwatch2/compare/v0.2.4...v0.3.0
 [0.2.4]: https://github.com/watchthelight/lightwatch2/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/watchthelight/lightwatch2/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/watchthelight/lightwatch2/compare/v0.2.1...v0.2.2

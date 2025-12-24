@@ -50,7 +50,7 @@ The viewer's eye into the cosmic experience.
 
 | # | Prompt | Status | Description |
 |---|--------|--------|-------------|
-| 11 | CAMERA-RIG | [ ] | Perspective camera, breathing motion |
+| 11 | CAMERA-RIG | [x] | Perspective camera, breathing motion |
 | 12 | CAMERA-BEHAVIORS | [ ] | Drift, approach, pullback modes |
 | 13 | CAMERA-DOF | [ ] | Bokeh depth of field shader |
 | 14 | CAMERA-SHAKE | [ ] | Trauma-based shake system |
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 10-INPUT-HANDLER
-**Next prompt**: 11-CAMERA-RIG
-**Overall progress**: 10/40 (25%)
+**Last completed prompt**: 11-CAMERA-RIG
+**Next prompt**: 12-CAMERA-BEHAVIORS
+**Overall progress**: 11/40 (27.5%)
