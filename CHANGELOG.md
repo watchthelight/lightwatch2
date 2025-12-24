@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.2] - 2024-12-24
+
+### Added
+- `src/audio/spatial.rs` - 3D spatial audio system
+  - SpatialAudioConfig: max_distance, reference_distance, rolloff, Doppler settings
+  - AudioListener component: tracks camera for listener position
+  - SpatialAudioSource component: computed gain, pan, pitch
+  - calculate_attenuation: inverse distance falloff
+  - calculate_panning: stereo positioning from 3D direction
+  - calculate_doppler: pitch shift for moving sources
+  - update_spatial_audio: processes all sources relative to listener
+  - attach_listener_to_camera: auto-attaches listener to ExperienceCamera
+  - SpatialAudioPlugin registers config and systems
+- `src/audio/reverb.rs` - Schroeder reverb
+  - CombFilter: 8 parallel delay lines with feedback (0.84)
+  - AllpassFilter: 4 series diffusion filters (0.5)
+  - Reverb: combines filters for cosmic spaciousness
+  - Sample-rate scaled delays for consistency
+- `src/audio/ambiance.rs` - Cosmic background ambiance
+  - CosmicAmbiance resource: layered drone generator
+  - Rumble: 30Hz sine → lowpass (60Hz cutoff)
+  - Shimmer: 800Hz sine → highpass (2kHz cutoff)
+  - Noise: white noise → bandpass (400Hz center)
+  - Combined for cosmic void texture
+
+### Notes
+- Prompt 35-AUDIO-SPATIAL complete
+- 87.5% overall progress
+
 ## [0.7.1] - 2024-12-24
 
 ### Added
@@ -746,7 +775,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.7.1...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.7.2...HEAD
+[0.7.2]: https://github.com/watchthelight/lightwatch2/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/watchthelight/lightwatch2/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/watchthelight/lightwatch2/compare/v0.6.4...v0.7.0
 [0.6.4]: https://github.com/watchthelight/lightwatch2/compare/v0.6.3...v0.6.4
