@@ -52,7 +52,7 @@ The viewer's eye into the cosmic experience.
 |---|--------|--------|-------------|
 | 11 | CAMERA-RIG | [x] | Perspective camera, breathing motion |
 | 12 | CAMERA-BEHAVIORS | [x] | Drift, approach, pullback modes |
-| 13 | CAMERA-DOF | [ ] | Bokeh depth of field shader |
+| 13 | CAMERA-DOF | [x] | Bokeh depth of field shader |
 | 14 | CAMERA-SHAKE | [ ] | Trauma-based shake system |
 | 15 | CAMERA-TRANSITIONS | [ ] | Cinematic sequences |
 
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 12-CAMERA-BEHAVIORS
-**Next prompt**: 13-CAMERA-DOF
-**Overall progress**: 12/40 (30%)
+**Last completed prompt**: 13-CAMERA-DOF
+**Next prompt**: 14-CAMERA-SHAKE
+**Overall progress**: 13/40 (32.5%)
