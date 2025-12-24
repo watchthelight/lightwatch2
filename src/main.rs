@@ -5,6 +5,7 @@
 use bevy::prelude::*;
 use bevy::render::settings::{Backends, RenderCreation, WgpuSettings};
 use bevy::render::RenderPlugin;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
 
 mod audio;
 mod bang;
@@ -17,6 +18,28 @@ mod shaders;
 mod travelers;
 
 fn main() {
+    // Initialize tracing with structured output
+    tracing_subscriber::registry()
+        .with(
+            EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+                if cfg!(debug_assertions) {
+                    "lightwatch=debug,lightwatch::events=info,wgpu=warn,bevy=info".into()
+                } else {
+                    "lightwatch=info,wgpu=error,bevy=warn".into()
+                }
+            }),
+        )
+        .with(
+            tracing_subscriber::fmt::layer()
+                .with_target(true)
+                .with_thread_ids(false)
+                .with_file(false)
+                .with_line_number(false),
+        )
+        .init();
+
+    info!("LIGHTWATCH starting");
+
     App::new()
         .add_plugins(
             DefaultPlugins
