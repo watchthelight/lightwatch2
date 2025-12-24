@@ -1,5 +1,7 @@
 //! God rays - Screen-space radial blur from bang core
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 use super::{BangConfig, BangCore};

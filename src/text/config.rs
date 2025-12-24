@@ -1,5 +1,7 @@
 //! Text display configuration
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 /// Text display configuration

@@ -1,5 +1,7 @@
 //! Traveler leitmotif definitions
 
+#![allow(dead_code)]
+
 use crate::core::TravelerId;
 
 /// Melodic contour types

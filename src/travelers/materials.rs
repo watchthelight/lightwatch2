@@ -1,5 +1,7 @@
 //! Traveler PBR materials - core, shell, edge with dynamic properties
 
+#![allow(dead_code)]
+
 use std::collections::HashMap;
 
 use bevy::pbr::StandardMaterial;

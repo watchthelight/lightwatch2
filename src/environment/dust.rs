@@ -1,5 +1,7 @@
 //! Nebula dust particles - 10,000 particles at varied depths
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 use rand::Rng;
 

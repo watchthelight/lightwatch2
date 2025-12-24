@@ -1,5 +1,7 @@
 //! Camera cinematic transitions - keyframed paths with easing
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 use super::CameraRig;

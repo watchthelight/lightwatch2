@@ -1,5 +1,7 @@
 //! Traveler identity - who they are and what defines them
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 use crate::core::TravelerId;

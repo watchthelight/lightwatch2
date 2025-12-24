@@ -1,5 +1,7 @@
 //! Experience clock - the 143-second heartbeat of LIGHTWATCH
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 /// The total duration of the LIGHTWATCH experience

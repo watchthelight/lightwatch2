@@ -1,5 +1,7 @@
 //! Post-processing configuration
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 /// Post-processing master configuration

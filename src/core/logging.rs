@@ -1,5 +1,7 @@
 //! Wide event logging system - structured context for every event
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 use std::collections::HashMap;
 use std::time::Instant;

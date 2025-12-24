@@ -22,8 +22,6 @@ pub use shader_material::*;
 pub use spawn::*;
 pub use state::*;
 
-// Re-export TravelerId from core::events
-
 /// Traveler plugin for components and lifecycle
 pub struct TravelersPlugin;
 

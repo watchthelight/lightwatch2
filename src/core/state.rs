@@ -1,5 +1,7 @@
 //! Experience state machine - Loading → Ready → Running → Ending → Ended
 
+#![allow(dead_code)]
+
 use super::clock::{ExperienceClock, Phase};
 use bevy::prelude::*;
 

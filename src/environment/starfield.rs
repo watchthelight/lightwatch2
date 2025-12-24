@@ -1,5 +1,7 @@
 //! Starfield - 2000 stars with twinkling and phase-driven reveal/fade
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 use rand::Rng;
 

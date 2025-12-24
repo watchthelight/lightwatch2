@@ -1,5 +1,7 @@
 //! Camera rig - position, rotation, and offset management
 
+#![allow(dead_code)]
+
 use bevy::core_pipeline::bloom::BloomSettings;
 use bevy::core_pipeline::tonemapping::Tonemapping;
 use bevy::prelude::*;

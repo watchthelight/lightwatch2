@@ -1,5 +1,7 @@
 //! Traveler geometry - procedural Platonic solid mesh generation
 
+#![allow(dead_code)]
+
 use std::collections::HashMap;
 
 use bevy::prelude::*;

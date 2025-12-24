@@ -1,5 +1,7 @@
 //! Camera shake system - trauma-based organic shake
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 use super::CameraRig;

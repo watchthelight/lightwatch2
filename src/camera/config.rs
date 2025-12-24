@@ -1,5 +1,7 @@
 //! Camera configuration constants
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 /// Global camera configuration

@@ -1,5 +1,7 @@
 //! Camera behavior system - drift, approach, pullback modes
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 use super::CameraRig;

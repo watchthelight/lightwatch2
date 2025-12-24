@@ -1,5 +1,7 @@
 //! Dynamic exposure control tied to experience phase
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 use bevy::render::camera::Exposure;
 

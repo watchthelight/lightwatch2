@@ -1,5 +1,7 @@
 //! Musical scale system - D pentatonic
 
+#![allow(dead_code)]
+
 /// Musical note frequencies (A4 = 440Hz)
 pub const A4: f32 = 440.0;
 

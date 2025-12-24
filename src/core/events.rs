@@ -1,4 +1,9 @@
 //! Event catalog - all event types for decoupled system communication
+//!
+//! These events define the communication contract between systems.
+//! Many fields are intentionally defined for future use.
+
+#![allow(dead_code)]
 
 use super::Phase;
 use bevy::prelude::*;

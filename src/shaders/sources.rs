@@ -1,5 +1,7 @@
 //! Embedded shader sources - compiled into the binary
 
+#![allow(dead_code)]
+
 /// Traveler glow shader - pulsing emissive effect
 pub const TRAVELER_GLOW: &str = include_str!("../../assets/shaders/traveler_glow.wgsl");
 

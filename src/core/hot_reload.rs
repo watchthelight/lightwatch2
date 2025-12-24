@@ -1,5 +1,7 @@
 //! Hot reloading configuration for development
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 /// Hot reload configuration
@@ -31,6 +33,7 @@ pub fn setup_hot_reload(_commands: Commands) {
 }
 
 /// Manual reload trigger (F5)
+#[allow(unused_variables)]
 pub fn manual_reload_trigger(keyboard: Res<ButtonInput<KeyCode>>, _asset_server: Res<AssetServer>) {
     #[cfg(debug_assertions)]
     if keyboard.just_pressed(KeyCode::F5) {

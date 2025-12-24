@@ -1,5 +1,7 @@
 //! Depth of field system - focus control and blur settings
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 use crate::core::{CameraFocusEvent, ExperienceClock, Phase};

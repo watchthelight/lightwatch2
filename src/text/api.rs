@@ -1,5 +1,7 @@
 //! Transmission API for easy text display
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 use super::{TextPosition, Transmission, TransmissionQueue};

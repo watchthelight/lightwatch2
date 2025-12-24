@@ -1,5 +1,7 @@
 //! Oscillator waveform generators
 
+#![allow(dead_code)]
+
 use std::f32::consts::TAU;
 
 /// Oscillator waveform types

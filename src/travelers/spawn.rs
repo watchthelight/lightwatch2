@@ -1,5 +1,7 @@
 //! Traveler spawn system - entity creation and registry
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 use super::{Traveler, TravelerDef, TravelerGrief, TravelerPulse, TravelerState, TravelerVisibility};

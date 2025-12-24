@@ -4,7 +4,7 @@ use bevy::prelude::*;
 use bevy::window::CursorGrabMode;
 
 use super::state::ExperienceState;
-use super::{ExperienceClock, TimeControl};
+use super::ExperienceClock;
 use crate::wide_event;
 
 /// Input handler configuration

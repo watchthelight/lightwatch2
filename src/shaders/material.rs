@@ -1,5 +1,7 @@
 //! Custom material definitions for LIGHTWATCH
 
+#![allow(dead_code)]
+
 use bevy::{
     prelude::*,
     render::render_resource::{AsBindGroup, ShaderRef},

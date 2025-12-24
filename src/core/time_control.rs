@@ -1,5 +1,7 @@
 //! Development time control - pause, speed, phase jumping
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 
 /// Development time control

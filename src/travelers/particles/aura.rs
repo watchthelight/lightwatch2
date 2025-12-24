@@ -1,5 +1,7 @@
 //! Aura particles - orbiting motes of light around travelers
 
+#![allow(dead_code)]
+
 use bevy::prelude::*;
 use rand::Rng;
 

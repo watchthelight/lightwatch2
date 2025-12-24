@@ -14,6 +14,5 @@ pub mod travelers;
 /// Common prelude for LIGHTWATCH
 pub mod prelude {
     pub use crate::core::*;
-    pub use crate::travelers::TravelerId;
     pub use bevy::prelude::*;
 }
