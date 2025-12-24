@@ -7,12 +7,14 @@ mod breathing;
 mod config;
 mod dof;
 mod rig;
+mod shake;
 
 pub use behavior::*;
 pub use breathing::*;
 pub use config::*;
 pub use dof::*;
 pub use rig::*;
+pub use shake::*;
 
 /// Camera plugin for cinematic camera control
 pub struct CameraPlugin;
@@ -23,6 +25,7 @@ impl Plugin for CameraPlugin {
             .init_resource::<CameraConfig>()
             .init_resource::<CameraBehaviorState>()
             .init_resource::<DepthOfFieldSettings>()
+            .init_resource::<CameraShake>()
             .add_systems(Startup, spawn_camera)
             .add_systems(
                 Update,
@@ -41,18 +44,21 @@ impl Plugin for CameraPlugin {
                     update_dof_for_phase,
                     handle_focus_events,
                     interpolate_focus,
+                    // Shake systems
+                    handle_shake_events,
+                    update_shake,
+                    apply_shake_to_rig,
                     // Final application
                     apply_rig_to_transform
                         .after(update_breathing)
                         .after(apply_drift_behavior)
                         .after(apply_approach_behavior)
                         .after(apply_pullback_behavior)
-                        .after(reset_static_behavior),
+                        .after(reset_static_behavior)
+                        .after(apply_shake_to_rig),
                 ),
             );
 
-        // TODO: Trauma-based shake
         // TODO: Cinematic transitions
-        // TODO: DOF render node (post-processing integration)
     }
 }
