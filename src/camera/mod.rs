@@ -5,11 +5,13 @@ use bevy::prelude::*;
 mod behavior;
 mod breathing;
 mod config;
+mod dof;
 mod rig;
 
 pub use behavior::*;
 pub use breathing::*;
 pub use config::*;
+pub use dof::*;
 pub use rig::*;
 
 /// Camera plugin for cinematic camera control
@@ -20,6 +22,7 @@ impl Plugin for CameraPlugin {
         app.init_resource::<BreathingConfig>()
             .init_resource::<CameraConfig>()
             .init_resource::<CameraBehaviorState>()
+            .init_resource::<DepthOfFieldSettings>()
             .add_systems(Startup, spawn_camera)
             .add_systems(
                 Update,
@@ -34,6 +37,10 @@ impl Plugin for CameraPlugin {
                     apply_approach_behavior,
                     apply_pullback_behavior,
                     reset_static_behavior,
+                    // DOF systems
+                    update_dof_for_phase,
+                    handle_focus_events,
+                    interpolate_focus,
                     // Final application
                     apply_rig_to_transform
                         .after(update_breathing)
@@ -44,8 +51,8 @@ impl Plugin for CameraPlugin {
                 ),
             );
 
-        // TODO: Depth of field
         // TODO: Trauma-based shake
         // TODO: Cinematic transitions
+        // TODO: DOF render node (post-processing integration)
     }
 }
