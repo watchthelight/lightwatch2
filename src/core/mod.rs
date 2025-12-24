@@ -3,6 +3,7 @@
 use bevy::diagnostic::FrameTimeDiagnosticsPlugin;
 use bevy::prelude::*;
 
+pub mod build_info;
 pub mod debug_overlay;
 pub mod exposure;
 pub mod hot_reload;
@@ -11,6 +12,7 @@ pub mod renderer;
 pub mod time_control;
 pub mod window;
 
+pub use build_info::*;
 pub use debug_overlay::*;
 pub use exposure::*;
 pub use hot_reload::*;

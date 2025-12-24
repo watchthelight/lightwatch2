@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Build for distribution
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+VERSION=$(grep '^version' Cargo.toml | head -1 | cut -d'"' -f2)
+TARGET=$(rustc -vV | grep host | cut -d' ' -f2)
+DIST_DIR="dist"
+BINARY_NAME="lightwatch-${VERSION}-${TARGET}"
+
+echo "Building LIGHTWATCH v${VERSION} for ${TARGET}..."
+
+# Clean and build
+cargo clean
+cargo build --release
+
+# Create dist directory
+mkdir -p "$DIST_DIR"
+
+# Copy binary
+cp "target/release/lightwatch" "$DIST_DIR/$BINARY_NAME"
+
+# Get binary size
+SIZE=$(du -h "$DIST_DIR/$BINARY_NAME" | cut -f1)
+
+echo ""
+echo "Distribution build complete!"
+echo "  Binary: $DIST_DIR/$BINARY_NAME"
+echo "  Size: $SIZE"
+echo ""
+
+# Create tarball
+if command -v tar &> /dev/null; then
+    cd "$DIST_DIR"
+    tar -czvf "${BINARY_NAME}.tar.gz" "$BINARY_NAME"
+    echo "  Archive: $DIST_DIR/${BINARY_NAME}.tar.gz"
+fi

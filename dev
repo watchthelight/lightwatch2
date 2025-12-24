@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Quick dev run with dynamic linking and hot reload
+set -e
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+# Set log level for development
+export RUST_LOG="lightwatch=debug,lightwatch::events=info,wgpu=warn"
+
+# Run with cargo (enables hot reload)
+cargo run --features dev

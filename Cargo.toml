@@ -1,6 +1,6 @@
 [package]
 name = "lightwatch"
-version = "0.1.0"
+version = "0.1.4"
 edition = "2021"
 authors = ["LIGHTWATCH Collective"]
 description = "A 143-second contemplative experience about connection and loss"
@@ -47,12 +47,21 @@ instant = "0.1"
 [dev-dependencies]
 criterion = "0.5"
 
+[features]
+default = []
+dev = ["bevy/dynamic_linking"]
+
 [profile.release]
 opt-level = 3
-lto = "thin"
+lto = "fat"
 codegen-units = 1
 panic = "abort"
 strip = true
+debug = false
+
+[profile.release-fast]
+inherits = "release"
+lto = "thin"
 
 [profile.dev]
 opt-level = 1

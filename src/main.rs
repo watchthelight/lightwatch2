@@ -38,7 +38,7 @@ fn main() {
         )
         .init();
 
-    info!("LIGHTWATCH starting");
+    core::BuildInfo::log_info();
 
     App::new()
         .add_plugins(
