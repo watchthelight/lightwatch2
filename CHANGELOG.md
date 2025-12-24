@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.2] - 2024-12-24
+
+### Added
+- `src/travelers/materials.rs` - PBR material system
+  - create_core_material: metallic, emissive
+  - create_shell_material: translucent, specular transmission
+  - create_edge_material: unlit, 2x emissive glow
+  - TravelerLayer enum (Core, Shell, Edge)
+  - TravelerMaterialCache for handle caching
+  - PulsingMaterial component for dynamic emissive
+  - update_pulsing_materials system
+  - evolve_materials_for_phase (Connection/Acceptance color shift)
+  - apply_grief_to_materials (desaturation during grief)
+
+### Notes
+- Prompt 18-TRAVELER-MATERIALS complete
+- 45% overall progress
+
 ## [0.4.1] - 2024-12-24
 
 ### Added
@@ -383,7 +401,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/watchthelight/lightwatch2/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/watchthelight/lightwatch2/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/watchthelight/lightwatch2/compare/v0.3.4...v0.4.0
 [0.3.4]: https://github.com/watchthelight/lightwatch2/compare/v0.3.3...v0.3.4
