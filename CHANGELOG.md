@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2024-12-24
+
+### Added
+- `src/post/config.rs` - Post-processing configuration
+  - PostProcessConfig: master control for all effects
+  - BloomConfig: intensity, threshold, composite mode
+  - ChromaticAberrationConfig: base and max intensity
+  - FilmGrainConfig: intensity, brightness response
+  - VignetteConfig: intensity, midpoint, softness
+- `src/post/bloom.rs` - Dynamic bloom control
+  - update_bloom_for_bang: intensity increases during bang peak
+  - Smooth ramp up (3-4s) and decay (4-6s)
+- `src/post/dynamic.rs` - Dynamic post-processing state
+  - DynamicPostProcess: tracks current effect intensities
+  - update_chromatic_aberration: spikes during bang
+  - update_film_grain: stronger at start/end for "old film" feel
+  - update_vignette: pulses at phase transitions
+- `src/post/materials.rs` - Custom material definitions
+  - ChromaticAberrationMaterial: RGB channel offset shader interface
+  - FilmGrainMaterial: procedural noise with time
+  - VignetteMaterial: radial darkening
+- `assets/shaders/chromatic_aberration.wgsl` - CA shader
+  - Edge-based intensity (squared falloff)
+  - RGB channel separation
+- `assets/shaders/film_grain.wgsl` - Grain shader
+  - Hash-based procedural noise
+  - Brightness-responsive grain reduction
+- `assets/shaders/vignette.wgsl` - Vignette shader
+  - Smooth radial falloff
+  - Configurable midpoint and softness
+- PostPlugin integrates all post-processing systems
+
+### Notes
+- Prompt 39-POST-PROCESSING complete
+- **Phase 9 (Post-Processing) COMPLETE**
+- 97.5% overall progress
+
 ## [0.8.1] - 2024-12-24
 
 ### Added
@@ -882,7 +919,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/watchthelight/lightwatch2/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/watchthelight/lightwatch2/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/watchthelight/lightwatch2/compare/v0.7.3...v0.8.0
 [0.7.3]: https://github.com/watchthelight/lightwatch2/compare/v0.7.2...v0.7.3

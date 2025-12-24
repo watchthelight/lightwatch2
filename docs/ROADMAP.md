@@ -144,7 +144,7 @@ Final visual polish.
 
 | # | Prompt | Status | Description |
 |---|--------|--------|-------------|
-| 39 | POST-PROCESSING | [ ] | Bloom, chromatic aberration, grain, ACES |
+| 39 | POST-PROCESSING | [x] | Bloom, chromatic aberration, grain, ACES |
 
 **Milestone**: AAA visual quality
 
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 38-TEXT-FRAGMENTS
-**Next prompt**: 39-POST-PROCESSING
-**Overall progress**: 38/40 (95%)
+**Last completed prompt**: 39-POST-PROCESSING
+**Next prompt**: 40-FINAL-INTEGRATION
+**Overall progress**: 39/40 (97.5%)
