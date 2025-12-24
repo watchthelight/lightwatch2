@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.3] - 2024-12-24
+
+### Added
+- `src/bang/shockwave.rs` - Expanding torus shockwave system
+  - Shockwave component: radius, thickness, refraction, lifetime
+  - ShockwaveConfig: spawn_time (4s at peak), speed, max_radius
+  - ShockwaveState: tracks if spawned
+  - create_shockwave_mesh: procedural torus (64x16 segments)
+  - spawn_shockwave: creates at bang peak with refractive material
+  - update_shockwave: expanding radius, thinning, camera pass detection
+  - Increased emissive when passing through camera position
+  - reset_shockwave_state: cleanup for restart
+  - ShockwavePlugin registers all systems
+
+### Notes
+- Prompt 31-BANG-SHOCKWAVE complete
+- 77.5% overall progress
+
 ## [0.6.2] - 2024-12-24
 
 ### Added
@@ -635,7 +653,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.6.2...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.6.3...HEAD
+[0.6.3]: https://github.com/watchthelight/lightwatch2/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/watchthelight/lightwatch2/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/watchthelight/lightwatch2/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/watchthelight/lightwatch2/compare/v0.5.4...v0.6.0
