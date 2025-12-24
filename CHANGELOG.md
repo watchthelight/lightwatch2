@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.5] - 2024-12-24
+
+### Added
+- `src/travelers/particles/trails.rs` - Motion trail particle system
+  - TravelerTrail component with per-traveler configuration
+  - PositionHistory tracks positions with timestamps
+  - TrailParticle with spawn_time, fade_duration, size
+  - setup_traveler_trails: adds trail components on spawn
+  - update_position_history: tracks movement with min_distance threshold
+  - spawn_trail_particles: creates particles at recent positions
+  - update_trail_particles: handles fade, shrink, and cleanup
+  - control_trail_activation: enables trails during movement phases
+  - TrailMeshCache for shared trail mesh
+- Traveler-specific trail configurations:
+  - Archivist: 20 points, 1.5s fade
+  - Wanderer: 30 points, 2.0s fade (longer trails)
+  - Keeper: 15 points, 1.0s fade
+  - Child: 25 points, 0.8s fade (quick)
+  - Other: 40 points, 3.0s fade (persistent)
+
+### Notes
+- Prompt 21-TRAVELER-PARTICLES-TRAILS complete
+- 52.5% overall progress
+
 ## [0.4.4] - 2024-12-24
 
 ### Added
@@ -442,7 +466,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.4...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.5...HEAD
+[0.4.5]: https://github.com/watchthelight/lightwatch2/compare/v0.4.4...v0.4.5
 [0.4.4]: https://github.com/watchthelight/lightwatch2/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/watchthelight/lightwatch2/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/watchthelight/lightwatch2/compare/v0.4.1...v0.4.2
