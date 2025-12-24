@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2024-12-24
+
+### Added
+- `src/core/logging.rs` - Wide event logging system with structured context
+  - WideEvent struct with key-value fields
+  - WideValue enum for typed context values
+  - `wide_event!` macro for event creation
+- `src/core/debug_overlay.rs` - In-game debug overlay
+  - Shows FPS, elapsed time, phase, traveler/particle counts
+  - F3 to toggle visibility
+  - Visible by default in debug builds
+- `src/core/hot_reload.rs` - Hot reload configuration
+  - HotReloadConfig resource
+  - F5 manual reload trigger (debug only)
+- `src/core/time_control.rs` - Development time control
+  - Space to pause/resume
+  - [ and ] to adjust playback speed
+  - Number keys 1-6, 0 to jump to phases
+- FrameTimeDiagnosticsPlugin for FPS tracking
+- Tracing subscriber with structured log output
+
+### Changed
+- Updated `src/core/mod.rs` with new development modules
+- Updated `src/main.rs` with tracing initialization
+
+### Notes
+- Prompt 04-DEVELOPMENT-TOOLS complete
+- Debug tools only active in debug builds
+- Release builds remain optimized and quiet
+- Binary size: 26MB
+
 ## [0.1.2] - 2024-12-24
 
 ### Added
@@ -103,7 +134,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/watchthelight/lightwatch2/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/watchthelight/lightwatch2/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/watchthelight/lightwatch2/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/watchthelight/lightwatch2/compare/v0.0.1...v0.1.0
