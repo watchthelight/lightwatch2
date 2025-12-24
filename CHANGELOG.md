@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2024-12-24
+
+### Added
+- `src/environment/starfield.rs` - 2000-star field system
+  - Star component with brightness, twinkle frequency, phase offset
+  - StarfieldConfig resource (2000 stars, 50-200m distance range)
+  - Fibonacci sphere distribution for even star placement
+  - spawn_starfield creates stars hidden at scale zero
+  - reveal_stars gradually shows stars by distance after bang (8s start)
+  - fade_in_stars smoothly increases opacity post-reveal
+  - update_stars applies twinkle animation and material updates
+  - fade_stars_during_acceptance fades stars in second half of Acceptance
+  - StarfieldPlugin and StarfieldAssets for mesh/material caching
+- StarMarker component for efficient querying
+
+### Notes
+- Prompt 23-STARFIELD complete
+- Phase 5 (Environment) begun
+- 57.5% overall progress
+
 ## [0.4.6] - 2024-12-24
 
 ### Added
@@ -486,7 +506,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.6...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/watchthelight/lightwatch2/compare/v0.4.6...v0.5.0
 [0.4.6]: https://github.com/watchthelight/lightwatch2/compare/v0.4.5...v0.4.6
 [0.4.5]: https://github.com/watchthelight/lightwatch2/compare/v0.4.4...v0.4.5
 [0.4.4]: https://github.com/watchthelight/lightwatch2/compare/v0.4.3...v0.4.4

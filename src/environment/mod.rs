@@ -2,12 +2,17 @@
 
 use bevy::prelude::*;
 
+mod starfield;
+
+pub use starfield::*;
+
 /// Environment plugin for cosmic backdrop
 pub struct EnvironmentPlugin;
 
 impl Plugin for EnvironmentPlugin {
-    fn build(&self, _app: &mut App) {
-        // TODO: Starfield (2000 stars)
+    fn build(&self, app: &mut App) {
+        app.add_plugins(StarfieldPlugin);
+
         // TODO: Raymarched nebula
         // TODO: Dust particles (10,000)
         // TODO: Volumetric fog

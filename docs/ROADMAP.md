@@ -84,7 +84,7 @@ The cosmic backdrop for the travelers' story.
 
 | # | Prompt | Status | Description |
 |---|--------|--------|-------------|
-| 23 | STARFIELD | [ ] | 2000 stars with twinkle |
+| 23 | STARFIELD | [x] | 2000 stars with twinkle |
 | 24 | NEBULA-RAYMARCHED | [ ] | Full-screen raymarched background |
 | 25 | NEBULA-DUST | [ ] | 10,000 GPU dust particles |
 | 26 | VOLUMETRIC-FOG | [ ] | Exponential height fog |
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 22-TRAVELER-BEHAVIORS
-**Next prompt**: 23-STARFIELD
-**Overall progress**: 22/40 (55%)
+**Last completed prompt**: 23-STARFIELD
+**Next prompt**: 24-NEBULA-RAYMARCHED
+**Overall progress**: 23/40 (57.5%)
