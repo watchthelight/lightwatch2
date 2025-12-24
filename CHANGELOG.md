@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2024-12-24
+
+### Added
+- 9 placeholder WGSL shaders embedded in binary:
+  - `traveler_glow.wgsl` - Pulsing emissive effect
+  - `nebula.wgsl` - Cosmic background
+  - `star_twinkle.wgsl` - Flickering starfield
+  - `post_chromatic.wgsl` - Chromatic aberration
+  - `post_grain.wgsl` - Film grain
+  - `post_vignette.wgsl` - Vignette effect
+  - `bang_core.wgsl` - Explosion core
+  - `bang_shockwave.wgsl` - Expanding ring distortion
+  - `bang_godray.wgsl` - Volumetric light beams
+- `src/shaders/sources.rs` - Embedded shader sources via include_str!
+- `src/shaders/loader.rs` - Shader loading system with ShaderHandles resource
+- `src/shaders/material.rs` - TravelerGlowMaterial custom material
+- `ShadersPlugin` for shader and material registration
+
+### Notes
+- Prompt 03-ASSET-PIPELINE complete
+- All shaders compiled into binary (no runtime file loading)
+- Binary size: 25MB (reasonable)
+- ShaderHandles resource provides access to all shader handles
+
 ## [0.1.1] - 2024-12-24
 
 ### Added
@@ -79,7 +103,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/watchthelight/lightwatch2/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/watchthelight/lightwatch2/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/watchthelight/lightwatch2/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/watchthelight/lightwatch2/compare/v0.0.0...v0.0.1
