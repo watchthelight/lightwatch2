@@ -1,6 +1,6 @@
 [package]
 name = "lightwatch"
-version = "0.3.4"
+version = "0.4.0"
 edition = "2021"
 authors = ["LIGHTWATCH Collective"]
 description = "A 143-second contemplative experience about connection and loss"

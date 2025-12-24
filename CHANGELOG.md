@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2024-12-24
+
+### Added
+- `src/travelers/identity.rs` - Traveler identity system
+  - Traveler component with id, name, spawn/fade times
+  - TravelerDef with static definitions for all 5 travelers
+  - TravelerGeometry: Icosahedron, Tetrahedron, Cube, Octahedron, Dodecahedron
+  - TravelerColor with base, evolved, final_state
+  - TravelerRhythm with frequency and variance
+- `src/travelers/state.rs` - Traveler state components
+  - TravelerState: Spawning, Active, Grieving, Fading, Gone
+  - TravelerVisibility with smooth opacity transitions
+  - TravelerPulse for rhythm tracking
+  - TravelerGrief for mourning state
+- `src/travelers/spawn.rs` - Spawn system
+  - TravelerBundle for entity creation
+  - handle_traveler_spawns from events
+  - TravelerRegistry resource
+- `src/travelers/lifecycle.rs` - Lifecycle systems
+  - Visibility updates, spawn finalization
+  - Fading and death handling
+  - Grief events and decay
+
+### Notes
+- Prompt 16-TRAVELER-COMPONENTS complete
+- Phase 4 (Traveler Rendering) begun
+- 40% overall progress
+
 ## [0.3.4] - 2024-12-24
 
 ### Added
@@ -337,7 +365,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.3.4...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/watchthelight/lightwatch2/compare/v0.3.4...v0.4.0
 [0.3.4]: https://github.com/watchthelight/lightwatch2/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/watchthelight/lightwatch2/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/watchthelight/lightwatch2/compare/v0.3.1...v0.3.2
