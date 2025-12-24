@@ -101,7 +101,7 @@ The explosive origin moment.
 | # | Prompt | Status | Description |
 |---|--------|--------|-------------|
 | 28 | BANG-CORE | [x] | Central explosion effect |
-| 29 | BANG-EXPANSION | [ ] | Radial expansion animation |
+| 29 | BANG-EXPANSION | [x] | Radial expansion animation |
 | 30 | BANG-GOD-RAYS | [ ] | Screen-space volumetric rays |
 | 31 | BANG-SHOCKWAVE | [ ] | Expanding torus distortion |
 | 32 | BANG-DEBRIS | [ ] | 5000 debris particles |
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 28-BANG-CORE
-**Next prompt**: 29-BANG-EXPANSION
-**Overall progress**: 28/40 (70%)
+**Last completed prompt**: 29-BANG-EXPANSION
+**Next prompt**: 30-BANG-GOD-RAYS
+**Overall progress**: 29/40 (72.5%)

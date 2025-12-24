@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.1] - 2024-12-24
+
+### Added
+- `src/bang/expansion.rs` - Expansion rings system
+  - ExpansionRing component: spawn_time, expansion, index
+  - ExpansionConfig: 5 rings, 0.2s interval, 3s duration, 80m radius
+  - RingSpawnState tracker for spawning coordination
+  - create_ring_mesh: procedural ring geometry (64 segments)
+  - spawn_expansion_rings: creates rings during expansion phase
+  - update_expansion_rings: eased expansion, cooling color, fading opacity
+  - reset_ring_state: cleans up after bang completes
+  - ExpansionPlugin registers all systems
+
+### Notes
+- Prompt 29-BANG-EXPANSION complete
+- 72.5% overall progress
+
 ## [0.6.0] - 2024-12-24
 
 ### Added
@@ -599,7 +616,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/watchthelight/lightwatch2/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/watchthelight/lightwatch2/compare/v0.5.4...v0.6.0
 [0.5.4]: https://github.com/watchthelight/lightwatch2/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/watchthelight/lightwatch2/compare/v0.5.2...v0.5.3
