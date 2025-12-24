@@ -104,7 +104,7 @@ The explosive origin moment.
 | 29 | BANG-EXPANSION | [x] | Radial expansion animation |
 | 30 | BANG-GOD-RAYS | [x] | Screen-space volumetric rays |
 | 31 | BANG-SHOCKWAVE | [x] | Expanding torus distortion |
-| 32 | BANG-DEBRIS | [ ] | 5000 debris particles |
+| 32 | BANG-DEBRIS | [x] | 5000 debris particles |
 
 **Milestone**: Overwhelming visual spectacle for origin
 
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 31-BANG-SHOCKWAVE
-**Next prompt**: 32-BANG-DEBRIS
-**Overall progress**: 31/40 (77.5%)
+**Last completed prompt**: 32-BANG-DEBRIS
+**Next prompt**: 33-AUDIO-SYNTHESIS
+**Overall progress**: 32/40 (80%)
