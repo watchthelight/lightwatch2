@@ -20,7 +20,7 @@ Building the Rust/Bevy project scaffold and development environment.
 |---|--------|--------|-------------|
 | 01 | PROJECT-SCAFFOLD | [x] | Cargo.toml, directory structure, build script |
 | 02 | WINDOW-RENDERER | [x] | Native window, HDR, MSAA |
-| 03 | ASSET-PIPELINE | [ ] | Asset loading, embedded assets, shaders |
+| 03 | ASSET-PIPELINE | [x] | Asset loading, embedded assets, shaders |
 | 04 | DEVELOPMENT-TOOLS | [ ] | Hot reload, debug overlay, logging |
 | 05 | BUILD-SYSTEM | [ ] | Release optimization, single binary |
 
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 02-WINDOW-RENDERER
-**Next prompt**: 03-ASSET-PIPELINE
-**Overall progress**: 2/40 (5%)
+**Last completed prompt**: 03-ASSET-PIPELINE
+**Next prompt**: 04-DEVELOPMENT-TOOLS
+**Overall progress**: 3/40 (7.5%)
