@@ -1,5 +1,6 @@
 //! Debug overlay - FPS, time, phase display
 
+use super::clock::{ExperienceClock, EXPERIENCE_DURATION};
 use bevy::diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin};
 use bevy::prelude::*;
 
@@ -15,8 +16,6 @@ pub struct DebugOverlay;
 #[derive(Resource)]
 pub struct DebugOverlayState {
     pub visible: bool,
-    pub phase: String,
-    pub elapsed: f32,
     pub traveler_count: usize,
     pub particle_count: usize,
 }
@@ -25,8 +24,6 @@ impl Default for DebugOverlayState {
     fn default() -> Self {
         Self {
             visible: cfg!(debug_assertions), // Visible in debug builds
-            phase: "signal".into(),
-            elapsed: 0.0,
             traveler_count: 0,
             particle_count: 0,
         }
@@ -67,6 +64,7 @@ pub fn spawn_debug_overlay(mut commands: Commands) {
 
 /// Update debug overlay text
 pub fn update_debug_overlay(
+    clock: Res<ExperienceClock>,
     state: Res<DebugOverlayState>,
     diagnostics: Res<DiagnosticsStore>,
     mut query: Query<&mut Text, With<DebugOverlayText>>,
@@ -84,11 +82,19 @@ pub fn update_debug_overlay(
         text.sections[0].value = format!(
             "LIGHTWATCH DEBUG\n\
              FPS: {:.0}\n\
-             Time: {:.2}s / 143s\n\
-             Phase: {}\n\
+             Time: {:.2}s / {:.0}s\n\
+             Phase: {} ({:.0}%)\n\
+             Running: {}\n\
              Travelers: {}\n\
              Particles: {}",
-            fps, state.elapsed, state.phase, state.traveler_count, state.particle_count,
+            fps,
+            clock.elapsed(),
+            EXPERIENCE_DURATION,
+            clock.phase().name(),
+            clock.phase_progress() * 100.0,
+            if clock.is_running() { "yes" } else { "PAUSED" },
+            state.traveler_count,
+            state.particle_count,
         );
     }
 }
