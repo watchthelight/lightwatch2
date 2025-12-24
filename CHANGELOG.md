@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2024-12-24
+
+### Added
+- `src/text/config.rs` - Text display configuration
+  - TextConfig: chars_per_second, hold_duration, fade_duration
+  - font_size (24.0), text_color, glow_color
+  - TextPosition enum: 9 screen positions (TopLeft → BottomRight)
+  - to_justify(): maps position to JustifyText
+  - to_offset(): returns screen offset coordinates
+- `src/text/transmission.rs` - Transmission component
+  - TransmissionState: Typing, Holding, Fading, Complete
+  - Transmission: full_text, revealed_chars, opacity, priority
+  - with_position(), with_priority(), with_hold(), with_speed() builders
+  - visible_text(): returns currently revealed substring
+  - typing_complete(): checks if all characters revealed
+- `src/text/queue.rs` - Transmission queue
+  - TransmissionQueue: ordered display with priority sorting
+  - enqueue(): adds transmission with optional delay
+  - next(): returns ready transmission, respects minimum_gap
+  - update(): decrements timers
+- `src/text/typewriter.rs` - Typewriter effect
+  - update_typewriter: character-by-character reveal
+  - Typing→Holding→Fading→Complete state machine
+  - Opacity fade during Fading state
+  - cleanup_transmissions: despawns Complete entities
+- `src/text/spawn.rs` - Spawning system
+  - spawn_queued_transmissions: processes queue
+  - Text2dBundle with position-based justify
+  - update_transmission_queue: timer updates
+- `src/text/api.rs` - Convenience API
+  - TransmissionCommands trait: transmit(), transmit_at()
+  - transmit_delayed(), transmit_full() for queue access
+- TransmissionPlugin and TextPlugin for easy registration
+
+### Notes
+- Prompt 37-TEXT-TRANSMISSION complete
+- Phase 8 (Narrative) begun
+- 92.5% overall progress
+
 ## [0.7.3] - 2024-12-24
 
 ### Added
@@ -810,7 +849,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.7.3...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/watchthelight/lightwatch2/compare/v0.7.3...v0.8.0
 [0.7.3]: https://github.com/watchthelight/lightwatch2/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/watchthelight/lightwatch2/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/watchthelight/lightwatch2/compare/v0.7.0...v0.7.1

@@ -8,6 +8,7 @@ pub mod environment;
 pub mod narrative;
 pub mod post;
 pub mod shaders;
+pub mod text;
 pub mod travelers;
 
 /// Common prelude for LIGHTWATCH
