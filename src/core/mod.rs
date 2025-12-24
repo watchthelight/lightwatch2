@@ -6,6 +6,7 @@ use bevy::prelude::*;
 pub mod build_info;
 pub mod clock;
 pub mod debug_overlay;
+pub mod events;
 pub mod exposure;
 pub mod hot_reload;
 pub mod logging;
@@ -18,6 +19,7 @@ pub mod window;
 pub use build_info::*;
 pub use clock::*;
 pub use debug_overlay::*;
+pub use events::*;
 pub use exposure::*;
 pub use hot_reload::*;
 pub use logging::*;
@@ -35,6 +37,8 @@ impl Plugin for CorePlugin {
         app
             // Diagnostics for FPS display
             .add_plugins(FrameTimeDiagnosticsPlugin::default())
+            // Events plugin
+            .add_plugins(EventsPlugin)
             // State
             .init_state::<ExperienceState>()
             // Events
@@ -92,7 +96,6 @@ impl Plugin for CorePlugin {
             ),
         );
 
-        // TODO: Event bus
         // TODO: Phase controller
     }
 }

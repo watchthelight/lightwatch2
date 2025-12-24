@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2024-12-24
+
+### Added
+- `src/core/events.rs` - Complete event catalog
+  - TravelerId enum (Archivist, Wanderer, Keeper, Child, Other)
+  - Traveler events: Spawned, Pulse, Fading, Faded, Grief, Synced
+  - Camera events: BehaviorChanged, Shake, Focus
+  - Audio events: PlayNote, PlayLeitmotif, AudioLayer
+  - Narrative events: DisplayText, HideText, SignalOverlay
+  - Visual events: Bang, Glitch, Environment
+  - MomentEvent for phase-specific triggers
+- EventsPlugin for centralized event registration
+
+### Changed
+- TravelerId moved from travelers/mod.rs to core/events.rs
+- travelers/mod.rs now re-exports TravelerId from core
+
+### Notes
+- Prompt 08-EVENT-BUS complete
+- 18 event types registered
+- Decoupled architecture for system communication
+
 ## [0.2.1] - 2024-12-24
 
 ### Added
@@ -197,7 +219,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/watchthelight/lightwatch2/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/watchthelight/lightwatch2/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/watchthelight/lightwatch2/compare/v0.1.4...v0.2.0
 [0.1.4]: https://github.com/watchthelight/lightwatch2/compare/v0.1.3...v0.1.4
