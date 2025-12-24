@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.2] - 2024-12-24
+
+### Added
+- `assets/shaders/god_rays.wgsl` - Screen-space radial blur shader
+  - Raymarch from pixel toward light source
+  - Accumulate samples with decay factor
+  - Distance-based falloff from center
+- `src/bang/god_rays.rs` - God rays system
+  - GodRayConfig: decay, density, samples, exposure settings
+  - GodRayState: light_position, intensity tracking
+  - update_god_ray_intensity: follows bang timeline
+  - interpolate_god_rays: smooth intensity transitions
+  - update_light_screen_position: world-to-screen projection
+  - GodRaysPlugin (render integration deferred to post-processing)
+
+### Notes
+- Prompt 30-BANG-GOD-RAYS complete
+- 75% overall progress
+
 ## [0.6.1] - 2024-12-24
 
 ### Added
@@ -616,7 +635,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.6.2...HEAD
+[0.6.2]: https://github.com/watchthelight/lightwatch2/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/watchthelight/lightwatch2/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/watchthelight/lightwatch2/compare/v0.5.4...v0.6.0
 [0.5.4]: https://github.com/watchthelight/lightwatch2/compare/v0.5.3...v0.5.4
