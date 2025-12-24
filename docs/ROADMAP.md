@@ -132,7 +132,7 @@ Transmission fragments and text.
 | # | Prompt | Status | Description |
 |---|--------|--------|-------------|
 | 37 | TEXT-TRANSMISSION | [x] | Text rendering system |
-| 38 | TEXT-FRAGMENTS | [ ] | Signal overlay, transmission text |
+| 38 | TEXT-FRAGMENTS | [x] | Signal overlay, transmission text |
 
 **Milestone**: Narrative layer complete
 
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 37-TEXT-TRANSMISSION
-**Next prompt**: 38-TEXT-FRAGMENTS
-**Overall progress**: 37/40 (92.5%)
+**Last completed prompt**: 38-TEXT-FRAGMENTS
+**Next prompt**: 39-POST-PROCESSING
+**Overall progress**: 38/40 (95%)

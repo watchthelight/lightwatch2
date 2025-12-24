@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.1] - 2024-12-24
+
+### Added
+- `src/text/fragments.rs` - Traveler text fragments
+  - TravelerFragment: text + traveler + phase timing
+  - 15 fragments across 5 travelers with phase constraints
+  - traveler_display_name(): THE ARCHIVIST, THE WANDERER, etc.
+- `src/text/signal.rs` - Signal detection overlay
+  - SignalConfig: reveal_interval (0.4s), reveal_order
+  - SignalState: tracks detection progress
+  - start_signal_detection: "SIGNAL DETECTED" at 0.5s
+  - reveal_travelers: names appear one-by-one
+- `src/text/fragment_display.rs` - Fragment display system
+  - FragmentState: shown fragments, timing, seeded RNG
+  - display_fragments: random selection within phase windows
+  - Quoted text with traveler attribution
+  - 8-20 second randomized intervals
+- `src/text/grief.rs` - Grief text for Child
+  - GriefTextState: tracks if grief shown
+  - show_grief_text: triggers on TravelerFadedEvent
+  - "the child fades first / as the youngest always do"
+- `src/text/final_messages.rs` - Experience ending text
+  - FinalMessageState: tracks message sequence
+  - show_final_messages: starts at 130s
+  - "They built beacons / that would outlast their stars"
+  - "We receive their light / long after they are gone"
+- FragmentsPlugin registers all narrative systems
+
+### Notes
+- Prompt 38-TEXT-FRAGMENTS complete
+- **Phase 8 (Narrative) COMPLETE**
+- 95% overall progress
+
 ## [0.8.0] - 2024-12-24
 
 ### Added
@@ -849,7 +882,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/watchthelight/lightwatch2/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/watchthelight/lightwatch2/compare/v0.7.3...v0.8.0
 [0.7.3]: https://github.com/watchthelight/lightwatch2/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/watchthelight/lightwatch2/compare/v0.7.1...v0.7.2
