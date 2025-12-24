@@ -45,6 +45,8 @@ pub struct LightwatchPlugin;
 impl Plugin for LightwatchPlugin {
     fn build(&self, app: &mut App) {
         app
+            // Shader loading (must be first for material registration)
+            .add_plugins(shaders::ShadersPlugin)
             // Core systems (window, renderer, exposure, clock, state, events)
             .add_plugins(core::CorePlugin)
             // Camera systems
