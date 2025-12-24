@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.6] - 2024-12-24
+
+### Added
+- `src/travelers/behavior/` - Complete behavior system
+  - pulse.rs: rhythmic pulsing with per-traveler shape curves
+  - sync.rs: synchronization during Connection, desync during Acceptance
+  - drift.rs: organic Perlin-like movement with phase multipliers
+  - anchor.rs: formation positions during Connection phase
+  - orbit.rs: orbital motion with tilted planes
+  - grief.rs: tremor, pulse disruption, per-traveler responses
+- TravelerBehaviorPlugin registers all behavior systems
+- TravelerDrift, TravelerAnchor, TravelerOrbit components
+- Character-specific pulse shapes (Archivist=smooth, Child=quick, Other=subtle)
+- Soft bounds pushing travelers back if too far from center
+
+### Notes
+- Prompt 22-TRAVELER-BEHAVIORS complete
+- Phase 4 (Traveler Rendering) complete!
+- 55% overall progress
+
 ## [0.4.5] - 2024-12-24
 
 ### Added
@@ -466,7 +486,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.5...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.6...HEAD
+[0.4.6]: https://github.com/watchthelight/lightwatch2/compare/v0.4.5...v0.4.6
 [0.4.5]: https://github.com/watchthelight/lightwatch2/compare/v0.4.4...v0.4.5
 [0.4.4]: https://github.com/watchthelight/lightwatch2/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/watchthelight/lightwatch2/compare/v0.4.2...v0.4.3

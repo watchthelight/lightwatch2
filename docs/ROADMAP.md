@@ -72,7 +72,7 @@ Bringing the five travelers to visual life.
 | 19 | TRAVELER-SHADERS | [x] | Custom WGSL shaders |
 | 20 | TRAVELER-PARTICLES-AURA | [x] | Orbiting particles |
 | 21 | TRAVELER-PARTICLES-TRAILS | [x] | Movement trails |
-| 22 | TRAVELER-BEHAVIORS | [ ] | Rhythm, sync, grief animations |
+| 22 | TRAVELER-BEHAVIORS | [x] | Rhythm, sync, grief animations |
 
 **Milestone**: Five unique travelers with full visual treatment
 
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 21-TRAVELER-PARTICLES-TRAILS
-**Next prompt**: 22-TRAVELER-BEHAVIORS
-**Overall progress**: 21/40 (52.5%)
+**Last completed prompt**: 22-TRAVELER-BEHAVIORS
+**Next prompt**: 23-STARFIELD
+**Overall progress**: 22/40 (55%)
