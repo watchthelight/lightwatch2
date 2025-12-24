@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2024-12-24
+
+### Added
+- `src/audio/oscillator.rs` - Waveform oscillator generators
+  - Waveform enum: Sine, Saw, Triangle, Square, Noise
+  - Oscillator struct with phase accumulation
+  - sample(): generates next sample at given sample rate
+  - white_noise(): xorshift-based noise generation
+  - set_frequency(): runtime frequency adjustment
+- `src/audio/filter.rs` - Biquad filter implementation
+  - FilterType enum: LowPass, HighPass, BandPass
+  - BiquadFilter with real-time coefficient calculation
+  - process(): IIR filter processing
+  - set_cutoff(), set_resonance(): parameter modulation
+- `src/audio/envelope.rs` - ADSR envelope generator
+  - EnvelopeStage: Idle, Attack, Decay, Sustain, Release
+  - Envelope with configurable ADSR times
+  - trigger(), release(): note control
+  - process(): returns current envelope level
+  - is_active(): check if envelope is sounding
+- `src/audio/voice.rs` - Combined synth voice
+  - Voice: oscillator + filter + amplitude envelope + filter envelope
+  - trigger(): start note with frequency
+  - release(): begin release phase
+  - process(): generates filtered, enveloped sample
+  - Filter envelope modulates cutoff frequency
+- `src/audio/engine.rs` - Polyphonic audio engine
+  - AudioEngine resource with voice management
+  - play_note(): voice stealing and allocation
+  - release_note(): release by frequency
+  - fill_buffer(): generate audio buffer
+  - 16 voice polyphony, 44100 Hz sample rate
+- AudioSynthesisPlugin initializes AudioEngine resource
+
+### Notes
+- Prompt 33-AUDIO-SYNTHESIS complete
+- Phase 7 (Audio) begun
+- 82.5% overall progress
+
 ## [0.6.4] - 2024-12-24
 
 ### Added
@@ -673,7 +712,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.6.4...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/watchthelight/lightwatch2/compare/v0.6.4...v0.7.0
 [0.6.4]: https://github.com/watchthelight/lightwatch2/compare/v0.6.3...v0.6.4
 [0.6.3]: https://github.com/watchthelight/lightwatch2/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/watchthelight/lightwatch2/compare/v0.6.1...v0.6.2
