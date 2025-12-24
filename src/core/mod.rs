@@ -43,19 +43,18 @@ impl Plugin for CorePlugin {
                     update_debug_overlay,
                     toggle_debug_overlay,
                 ),
-            )
-            // Debug-only systems
-            .add_systems(
-                Update,
-                (
-                    #[cfg(debug_assertions)]
-                    toggle_fullscreen,
-                    #[cfg(debug_assertions)]
-                    manual_reload_trigger,
-                    #[cfg(debug_assertions)]
-                    time_control::handle_time_control,
-                ),
             );
+
+        // Debug-only systems
+        #[cfg(debug_assertions)]
+        app.add_systems(
+            Update,
+            (
+                toggle_fullscreen,
+                manual_reload_trigger,
+                time_control::handle_time_control,
+            ),
+        );
 
         // TODO: Clock system
         // TODO: State machine
