@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] - 2024-12-24
+
+### Added
+- `src/core/phase_controller.rs` - Experience orchestration
+  - Moment struct for scheduled actions
+  - MomentAction enum with all action types
+  - 40+ moments across all 6 phases
+  - process_moments system for event dispatch
+  - reset_controller_on_restart for dev mode
+- PhaseControllerPlugin for centralized moment scheduling
+
+### Notes
+- Prompt 09-PHASE-CONTROLLER complete
+- Complete 143-second timeline defined
+- All systems wired via event dispatch
+
 ## [0.2.2] - 2024-12-24
 
 ### Added
@@ -219,7 +235,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/watchthelight/lightwatch2/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/watchthelight/lightwatch2/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/watchthelight/lightwatch2/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/watchthelight/lightwatch2/compare/v0.1.4...v0.2.0
