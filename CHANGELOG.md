@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2024-12-24
+
+### Added
+- `src/environment/dust.rs` - 10,000 dust particle system
+  - DustParticle with depth, opacity, velocity, noise seed
+  - DustConfig: 10k particles, 20-150m depth range
+  - Spherical distribution with vertical flattening
+  - Opacity decreases with distance for depth perception
+  - animate_dust: drift + noise-based motion with position wrapping
+  - update_dust_visibility: phase-driven fade
+  - DustLayer component for 4-tier depth organization
+  - DustAssets caches shared mesh/material
+  - DustPlugin registers all systems
+
+### Notes
+- Prompt 25-NEBULA-DUST complete
+- 62.5% overall progress
+
 ## [0.5.1] - 2024-12-24
 
 ### Added
@@ -526,7 +544,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.5.2...HEAD
+[0.5.2]: https://github.com/watchthelight/lightwatch2/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/watchthelight/lightwatch2/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/watchthelight/lightwatch2/compare/v0.4.6...v0.5.0
 [0.4.6]: https://github.com/watchthelight/lightwatch2/compare/v0.4.5...v0.4.6
