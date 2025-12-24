@@ -57,7 +57,7 @@ pub fn update_exposure(
     time: Res<Time>,
 ) {
     // Lerp current toward target
-    let delta = (control.target - control.current) * control.speed * time.delta_secs();
+    let delta = (control.target - control.current) * control.speed * time.delta_seconds();
     control.current += delta;
 
     // Apply to all cameras

@@ -1,6 +1,6 @@
 //! Renderer configuration for HDR and tonemapping
 
-use bevy::core_pipeline::bloom::Bloom;
+use bevy::core_pipeline::bloom::BloomSettings;
 use bevy::core_pipeline::tonemapping::Tonemapping;
 use bevy::prelude::*;
 use bevy::render::camera::Exposure;
@@ -13,7 +13,7 @@ pub struct CinematicCameraBundle {
     pub transform: Transform,
     pub tonemapping: Tonemapping,
     pub exposure: Exposure,
-    pub bloom: Bloom,
+    pub bloom: BloomSettings,
 }
 
 impl Default for CinematicCameraBundle {
@@ -27,7 +27,7 @@ impl Default for CinematicCameraBundle {
             transform: Transform::from_xyz(0.0, 0.0, 10.0).looking_at(Vec3::ZERO, Vec3::Y),
             tonemapping: Tonemapping::AcesFitted,
             exposure: Exposure::SUNLIGHT,
-            bloom: Bloom::NATURAL,
+            bloom: BloomSettings::NATURAL,
         }
     }
 }
