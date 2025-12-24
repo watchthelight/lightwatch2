@@ -64,27 +64,6 @@ pub fn check_loading_complete(
     crate::wide_event!("loading_complete").emit(0.0);
 }
 
-/// Start the experience when clicked
-pub fn start_on_click(
-    state: Res<State<ExperienceState>>,
-    mut next_state: ResMut<NextState<ExperienceState>>,
-    mouse: Res<ButtonInput<MouseButton>>,
-    mut clock: ResMut<ExperienceClock>,
-) {
-    if *state.get() != ExperienceState::Ready {
-        return;
-    }
-
-    if mouse.just_pressed(MouseButton::Left) {
-        next_state.set(ExperienceState::Running);
-        clock.start();
-
-        crate::wide_event!("experience_started")
-            .with_str("trigger", "click")
-            .emit(0.0);
-    }
-}
-
 /// Transition to Ending when clock finishes
 pub fn check_experience_end(
     state: Res<State<ExperienceState>>,
