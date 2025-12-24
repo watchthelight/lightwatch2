@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.4] - 2024-12-24
+
+### Added
+- `src/environment/reflection.rs` - Reflection plane system
+  - ReflectionConfig: height, size, max_opacity, blur, falloff
+  - ReflectionState for smooth opacity interpolation
+  - ReflectionPlane marker component
+  - spawn_reflection_plane with metallic/glass-like material
+  - update_reflection_for_phase: fade in during Connection, out during Acceptance
+  - interpolate_reflection: lerps opacity, updates material/visibility
+  - ReflectionPlugin registers all systems
+
+### Notes
+- Prompt 27-REFLECTION-PLANE complete
+- Phase 5 (Environment) complete!
+- 67.5% overall progress
+
 ## [0.5.3] - 2024-12-24
 
 ### Added
@@ -561,7 +578,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.5.3...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.5.4...HEAD
+[0.5.4]: https://github.com/watchthelight/lightwatch2/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/watchthelight/lightwatch2/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/watchthelight/lightwatch2/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/watchthelight/lightwatch2/compare/v0.5.0...v0.5.1
