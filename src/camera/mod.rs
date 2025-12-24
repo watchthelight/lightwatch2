@@ -8,6 +8,7 @@ mod config;
 mod dof;
 mod rig;
 mod shake;
+mod transitions;
 
 pub use behavior::*;
 pub use breathing::*;
@@ -15,6 +16,7 @@ pub use config::*;
 pub use dof::*;
 pub use rig::*;
 pub use shake::*;
+pub use transitions::*;
 
 /// Camera plugin for cinematic camera control
 pub struct CameraPlugin;
@@ -26,12 +28,18 @@ impl Plugin for CameraPlugin {
             .init_resource::<CameraBehaviorState>()
             .init_resource::<DepthOfFieldSettings>()
             .init_resource::<CameraShake>()
+            .init_resource::<ActiveTransition>()
+            .add_event::<TriggerTransitionEvent>()
             .add_systems(Startup, spawn_camera)
             .add_systems(
                 Update,
                 (
                     // Breathing (always runs)
                     update_breathing,
+                    // Transition systems (takes priority)
+                    start_phase_transitions,
+                    handle_transition_triggers,
+                    update_transition,
                     // Behavior handling
                     handle_behavior_changes,
                     update_behavior_transition,
@@ -51,6 +59,7 @@ impl Plugin for CameraPlugin {
                     // Final application
                     apply_rig_to_transform
                         .after(update_breathing)
+                        .after(update_transition)
                         .after(apply_drift_behavior)
                         .after(apply_approach_behavior)
                         .after(apply_pullback_behavior)
@@ -58,7 +67,5 @@ impl Plugin for CameraPlugin {
                         .after(apply_shake_to_rig),
                 ),
             );
-
-        // TODO: Cinematic transitions
     }
 }
