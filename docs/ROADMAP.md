@@ -156,7 +156,7 @@ Final assembly and shipping.
 
 | # | Prompt | Status | Description |
 |---|--------|--------|-------------|
-| 40 | FINAL-INTEGRATION | [ ] | Polish, testing, executable build |
+| 40 | FINAL-INTEGRATION | [x] | Polish, testing, executable build |
 
 **Milestone**: Shippable experience
 
@@ -181,6 +181,13 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 39-POST-PROCESSING
-**Next prompt**: 40-FINAL-INTEGRATION
-**Overall progress**: 39/40 (97.5%)
+**Last completed prompt**: 40-FINAL-INTEGRATION
+**Status**: COMPLETE
+**Overall progress**: 40/40 (100%)
+
+---
+
+*LIGHTWATCH v1.0.0 Released*
+
+*They built beacons that would outlast their stars.*
+*We receive their light long after they are gone.*

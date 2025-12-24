@@ -15,6 +15,7 @@ mod environment;
 mod narrative;
 mod post;
 mod shaders;
+mod text;
 mod travelers;
 
 fn main() {
@@ -85,6 +86,8 @@ impl Plugin for LightwatchPlugin {
             // Narrative/text systems
             .add_plugins(narrative::NarrativePlugin)
             // Post-processing
-            .add_plugins(post::PostPlugin);
+            .add_plugins(post::PostPlugin)
+            // Final integration (performance, polish, verification)
+            .add_plugins(core::IntegrationPlugin);
     }
 }

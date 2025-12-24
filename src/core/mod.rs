@@ -1,4 +1,4 @@
-//! Core systems: Window, Renderer, Exposure, Clock, State, Events
+//! Core systems: Window, Renderer, Exposure, Clock, State, Events, Integration
 
 use bevy::diagnostic::FrameTimeDiagnosticsPlugin;
 use bevy::prelude::*;
@@ -11,11 +11,14 @@ pub mod exposure;
 pub mod hot_reload;
 pub mod input;
 pub mod logging;
+pub mod performance;
 pub mod phase_controller;
+pub mod polish;
 pub mod ready_screen;
 pub mod renderer;
 pub mod state;
 pub mod time_control;
+pub mod timeline_verify;
 pub mod window;
 
 pub use build_info::*;
@@ -31,7 +34,10 @@ pub use ready_screen::*;
 pub use renderer::*;
 pub use state::*;
 pub use time_control::*;
+pub use timeline_verify::*;
 pub use window::*;
+pub use performance::{PerformanceConfig, PerformanceMetrics};
+pub use polish::FadeState;
 
 /// Core plugin for window, rendering, and core systems
 pub struct CorePlugin;
@@ -102,5 +108,30 @@ impl Plugin for CorePlugin {
                 clear_scrub_position.after(update_clock),
             ),
         );
+    }
+}
+
+/// Integration plugin for final polish and verification
+pub struct IntegrationPlugin;
+
+impl Plugin for IntegrationPlugin {
+    fn build(&self, app: &mut App) {
+        app.init_resource::<PerformanceConfig>()
+            .init_resource::<PerformanceMetrics>()
+            .init_resource::<TimelineVerification>()
+            .init_resource::<FadeState>()
+            .add_systems(
+                Update,
+                (
+                    performance::update_metrics,
+                    performance::adaptive_quality,
+                    timeline_verify::verify_timeline,
+                    polish::fade_visuals_at_end,
+                    polish::log_experience_ending,
+                ),
+            )
+            .add_systems(Last, timeline_verify::log_timeline_verification);
+
+        info!(target: "lightwatch::integration", "Integration plugin initialized");
     }
 }

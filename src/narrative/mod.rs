@@ -2,13 +2,14 @@
 
 use bevy::prelude::*;
 
+use crate::text;
+
 /// Narrative plugin for text and transmissions
 pub struct NarrativePlugin;
 
 impl Plugin for NarrativePlugin {
-    fn build(&self, _app: &mut App) {
-        // TODO: Text rendering system
-        // TODO: Transmission fragments
-        // TODO: Signal overlay
+    fn build(&self, app: &mut App) {
+        // Add text transmission and fragment plugins
+        app.add_plugins(text::TextPlugin);
     }
 }
