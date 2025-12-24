@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2024-12-24
+
+### Added
+- `assets/shaders/nebula.wgsl` - Raymarched nebula shader
+  - 3D gradient noise with quintic interpolation
+  - fbm (4 octaves) for volumetric cloud density
+  - raymarch_nebula with front-to-back compositing (24 steps)
+  - Drift animation for slow cosmic motion
+  - Amber/violet two-color gradient
+- `src/environment/nebula.rs` - Nebula system
+  - NebulaMaterial with color1/color2, time, intensity, drift, noise scale
+  - NebulaConfig resource for runtime adjustment
+  - update_nebula_intensity: phase-driven (fade in after bang, out during acceptance)
+  - spawn_nebula_background: large quad at z=-500
+  - NebulaPlugin registers material and systems
+
+### Notes
+- Prompt 24-NEBULA-RAYMARCHED complete
+- 60% overall progress
+
 ## [0.5.0] - 2024-12-24
 
 ### Added
@@ -506,7 +526,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/watchthelight/lightwatch2/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/watchthelight/lightwatch2/compare/v0.4.6...v0.5.0
 [0.4.6]: https://github.com/watchthelight/lightwatch2/compare/v0.4.5...v0.4.6
 [0.4.5]: https://github.com/watchthelight/lightwatch2/compare/v0.4.4...v0.4.5
