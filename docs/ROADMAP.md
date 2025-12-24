@@ -86,7 +86,7 @@ The cosmic backdrop for the travelers' story.
 |---|--------|--------|-------------|
 | 23 | STARFIELD | [x] | 2000 stars with twinkle |
 | 24 | NEBULA-RAYMARCHED | [x] | Full-screen raymarched background |
-| 25 | NEBULA-DUST | [ ] | 10,000 GPU dust particles |
+| 25 | NEBULA-DUST | [x] | 10,000 GPU dust particles |
 | 26 | VOLUMETRIC-FOG | [ ] | Exponential height fog |
 | 27 | REFLECTION-PLANE | [ ] | Planar reflection surface |
 
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 24-NEBULA-RAYMARCHED
-**Next prompt**: 25-NEBULA-DUST
-**Overall progress**: 24/40 (60%)
+**Last completed prompt**: 25-NEBULA-DUST
+**Next prompt**: 26-VOLUMETRIC-FOG
+**Overall progress**: 25/40 (62.5%)
