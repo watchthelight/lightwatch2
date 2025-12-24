@@ -2,10 +2,12 @@
 
 use bevy::prelude::*;
 
+mod behavior;
 mod breathing;
 mod config;
 mod rig;
 
+pub use behavior::*;
 pub use breathing::*;
 pub use config::*;
 pub use rig::*;
@@ -17,10 +19,31 @@ impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<BreathingConfig>()
             .init_resource::<CameraConfig>()
+            .init_resource::<CameraBehaviorState>()
             .add_systems(Startup, spawn_camera)
-            .add_systems(Update, (update_breathing, apply_rig_to_transform.after(update_breathing)));
+            .add_systems(
+                Update,
+                (
+                    // Breathing (always runs)
+                    update_breathing,
+                    // Behavior handling
+                    handle_behavior_changes,
+                    update_behavior_transition,
+                    // Behavior-specific systems
+                    apply_drift_behavior,
+                    apply_approach_behavior,
+                    apply_pullback_behavior,
+                    reset_static_behavior,
+                    // Final application
+                    apply_rig_to_transform
+                        .after(update_breathing)
+                        .after(apply_drift_behavior)
+                        .after(apply_approach_behavior)
+                        .after(apply_pullback_behavior)
+                        .after(reset_static_behavior),
+                ),
+            );
 
-        // TODO: Camera behaviors (drift, approach, pullback)
         // TODO: Depth of field
         // TODO: Trauma-based shake
         // TODO: Cinematic transitions
