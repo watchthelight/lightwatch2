@@ -3,6 +3,8 @@
 //! Five travelers. Fourteen billion years. One final transmission.
 
 use bevy::prelude::*;
+use bevy::render::settings::{Backends, RenderCreation, WgpuSettings};
+use bevy::render::RenderPlugin;
 
 mod audio;
 mod bang;
@@ -16,18 +18,22 @@ mod travelers;
 
 fn main() {
     App::new()
-        // Window configuration
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
-                title: "LIGHTWATCH".into(),
-                resolution: (1920., 1080.).into(),
-                present_mode: bevy::window::PresentMode::AutoVsync,
-                ..default()
-            }),
-            ..default()
-        }))
+        .add_plugins(
+            DefaultPlugins
+                .set(core::configure_window())
+                .set(RenderPlugin {
+                    render_creation: RenderCreation::Automatic(WgpuSettings {
+                        backends: Some(Backends::PRIMARY),
+                        power_preference: bevy::render::settings::PowerPreference::HighPerformance,
+                        ..default()
+                    }),
+                    ..default()
+                }),
+        )
         // Set background to pure black
         .insert_resource(ClearColor(Color::BLACK))
+        // 4x MSAA for anti-aliasing
+        .insert_resource(core::configure_msaa())
         // Initialize our systems
         .add_plugins(LightwatchPlugin)
         .run();
@@ -39,7 +45,7 @@ pub struct LightwatchPlugin;
 impl Plugin for LightwatchPlugin {
     fn build(&self, app: &mut App) {
         app
-            // Core systems (clock, state, events)
+            // Core systems (window, renderer, exposure, clock, state, events)
             .add_plugins(core::CorePlugin)
             // Camera systems
             .add_plugins(camera::CameraPlugin)
