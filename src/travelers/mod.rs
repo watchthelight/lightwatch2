@@ -2,20 +2,8 @@
 
 use bevy::prelude::*;
 
-/// The five travelers
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum TravelerId {
-    /// Icosahedron, amber, 0.14 Hz - The organizer
-    Archivist,
-    /// Tetrahedron, cyan, 0.11 Hz - The searcher
-    Wanderer,
-    /// Cube, orange, 0.08 Hz - The listener
-    Keeper,
-    /// Octahedron, white, 0.18 Hz - The youngest, dies first
-    Child,
-    /// Dodecahedron, violet, 0.06 Hz - Alien, silent, dies last
-    Other,
-}
+// Re-export TravelerId from core::events
+pub use crate::core::TravelerId;
 
 /// Traveler plugin for rendering and behavior
 pub struct TravelersPlugin;
