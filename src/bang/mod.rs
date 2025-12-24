@@ -3,11 +3,13 @@
 use bevy::prelude::*;
 
 mod core;
+mod debris;
 mod expansion;
 mod god_rays;
 mod shockwave;
 
 pub use core::*;
+pub use debris::*;
 pub use expansion::*;
 pub use god_rays::*;
 pub use shockwave::*;
@@ -20,8 +22,7 @@ impl Plugin for BangPlugin {
         app.add_plugins(BangCorePlugin)
             .add_plugins(ExpansionPlugin)
             .add_plugins(GodRaysPlugin)
-            .add_plugins(ShockwavePlugin);
-
-        // TODO: Debris particles (5000)
+            .add_plugins(ShockwavePlugin)
+            .add_plugins(DebrisPlugin);
     }
 }

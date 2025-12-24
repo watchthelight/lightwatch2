@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.4] - 2024-12-24
+
+### Added
+- `src/bang/debris.rs` - 5000 debris particles system
+  - DebrisConfig: 5000 particles, velocity range, decay, lifetimes
+  - DebrisParticle component: velocity, age, lifetime, is_seed
+  - DebrisState: spawn tracking
+  - spawn_debris: burst at peak with spherical distribution
+  - update_debris: velocity decay, temperature cooling, size shrink
+  - debris_temperature_color: white -> amber -> red -> dark gradient
+  - 5 seed particles persist longer with pulsing effect
+  - transform_seeds_to_travelers: converts seeds to TravelerSpawnMarker
+  - reset_debris_state: cleanup for restart
+  - DebrisPlugin registers all systems
+
+### Notes
+- Prompt 32-BANG-DEBRIS complete
+- Phase 6 (The Bang) complete!
+- 80% overall progress
+
 ## [0.6.3] - 2024-12-24
 
 ### Added
@@ -653,7 +673,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.6.3...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.6.4...HEAD
+[0.6.4]: https://github.com/watchthelight/lightwatch2/compare/v0.6.3...v0.6.4
 [0.6.3]: https://github.com/watchthelight/lightwatch2/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/watchthelight/lightwatch2/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/watchthelight/lightwatch2/compare/v0.6.0...v0.6.1
