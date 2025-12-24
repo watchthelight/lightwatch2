@@ -1,4 +1,21 @@
-//! Shader utilities and WGSL shader loading
+//! Shader utilities, embedded sources, and custom materials
 
-// Shader asset paths will be defined here
-// Custom shader types and utilities will be added as needed
+use bevy::prelude::*;
+
+pub mod loader;
+pub mod material;
+pub mod sources;
+
+pub use loader::*;
+pub use material::*;
+
+/// Shader plugin - loads all embedded shaders and registers custom materials
+pub struct ShadersPlugin;
+
+impl Plugin for ShadersPlugin {
+    fn build(&self, app: &mut App) {
+        app.init_resource::<ShaderHandles>()
+            .add_plugins(MaterialPlugin::<TravelerGlowMaterial>::default())
+            .add_systems(Startup, load_embedded_shaders);
+    }
+}
