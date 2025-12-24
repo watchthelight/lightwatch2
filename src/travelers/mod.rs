@@ -2,11 +2,13 @@
 
 use bevy::prelude::*;
 
+mod geometry;
 mod identity;
 mod lifecycle;
 mod spawn;
 mod state;
 
+pub use geometry::*;
 pub use identity::*;
 pub use lifecycle::*;
 pub use spawn::*;
@@ -20,7 +22,9 @@ pub struct TravelersPlugin;
 
 impl Plugin for TravelersPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<TravelerRegistry>().add_systems(
+        app.init_resource::<TravelerRegistry>()
+            .init_resource::<TravelerMeshCache>()
+            .add_systems(
             Update,
             (
                 handle_traveler_spawns,
@@ -34,7 +38,6 @@ impl Plugin for TravelersPlugin {
             ),
         );
 
-        // TODO: Procedural geometry
         // TODO: PBR materials
         // TODO: Custom shaders
         // TODO: Aura particles

@@ -45,7 +45,7 @@ pub struct TravelerDef {
     pub spawn_position: Vec3,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum TravelerGeometry {
     Icosahedron,  // Archivist - 20 faces, complex
     Tetrahedron,  // Wanderer - 4 faces, simple/sharp
