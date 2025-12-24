@@ -10,6 +10,7 @@ pub mod events;
 pub mod exposure;
 pub mod hot_reload;
 pub mod logging;
+pub mod phase_controller;
 pub mod ready_screen;
 pub mod renderer;
 pub mod state;
@@ -23,6 +24,7 @@ pub use events::*;
 pub use exposure::*;
 pub use hot_reload::*;
 pub use logging::*;
+pub use phase_controller::*;
 pub use ready_screen::*;
 pub use renderer::*;
 pub use state::*;
@@ -39,6 +41,8 @@ impl Plugin for CorePlugin {
             .add_plugins(FrameTimeDiagnosticsPlugin::default())
             // Events plugin
             .add_plugins(EventsPlugin)
+            // Phase controller
+            .add_plugins(PhaseControllerPlugin)
             // State
             .init_state::<ExperienceState>()
             // Events
@@ -95,7 +99,5 @@ impl Plugin for CorePlugin {
                 clear_scrub_position.after(update_clock),
             ),
         );
-
-        // TODO: Phase controller
     }
 }
