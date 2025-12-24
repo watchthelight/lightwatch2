@@ -32,9 +32,9 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    LIGHTWATCH RENDERER                       │
+│                    LIGHTWATCH RENDERER                      │
 ├─────────────────────────────────────────────────────────────┤
-│  Scene                                                       │
+│  Scene                                                      │
 │  ├── Starfield (2000 points)                                │
 │  ├── Nebula (raymarched background)                         │
 │  ├── Dust Particles (10,000 GPU particles)                  │
@@ -49,7 +49,7 @@
 │  │   └── Debris (5000 particles)                            │
 │  └── Volumetric Fog                                         │
 ├─────────────────────────────────────────────────────────────┤
-│  Post-Processing                                             │
+│  Post-Processing                                            │
 │  ├── Depth of Field (Bokeh)                                 │
 │  ├── Bloom (HDR)                                            │
 │  ├── Chromatic Aberration                                   │
@@ -62,23 +62,23 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    AUDIO SYNTHESIS                           │
+│                    AUDIO SYNTHESIS                          │
 ├─────────────────────────────────────────────────────────────┤
-│  Per Traveler                                                │
+│  Per Traveler                                               │
 │  ├── Base Oscillator (sine/triangle)                        │
 │  ├── Frequency (unique per traveler)                        │
-│  ├── Amplitude Envelope                                      │
-│  └── Leitmotif Generator                                     │
+│  ├── Amplitude Envelope                                     │
+│  └── Leitmotif Generator                                    │
 ├─────────────────────────────────────────────────────────────┤
-│  Global                                                      │
+│  Global                                                     │
 │  ├── Spatial Audio (3D positioning)                         │
 │  ├── Reverb (cathedral-scale)                               │
 │  ├── Master Mix                                             │
-│  └── Event-driven Triggers                                   │
+│  └── Event-driven Triggers                                  │
 │      ├── Bang                                               │
 │      ├── Connection                                         │
 │      ├── Grief (traveler death)                             │
-│      └── Final Silence                                       │
+│      └── Final Silence                                      │
 └─────────────────────────────────────────────────────────────┘
 ```
 
