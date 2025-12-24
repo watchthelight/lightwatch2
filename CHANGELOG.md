@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.3] - 2024-12-24
+
+### Added
+- `src/audio/bang_sound.rs` - Bang rumble effect
+  - BangRumble: layered sub-bass + mid + noise
+  - Sub-bass at 30Hz, mid at 60Hz
+  - Pitch drops over duration (0.5x by end)
+  - Filter sweep: opens to 500Hz then closes
+  - 6-second duration with ADSR envelope
+- `src/audio/grief_sound.rs` - Grief dissonance effect
+  - GriefDissonance: minor second cluster (A3, Bb3, B3)
+  - Three triangle oscillators with staggered envelopes
+  - Tremolo modulation at 4Hz
+  - Triggered when Child fades
+- `src/audio/silence.rs` - Strategic silence management
+  - SilenceState: Normal, FadingToSilence, Silent, FadingFromSilence
+  - SilenceManager: volume multiplier with cubic easing
+  - fade_to_silence(), fade_from_silence() controls
+- `src/audio/transitions.rs` - Phase transition sounds
+  - TransitionSound: phase-specific frequencies
+  - Signal→D4, Bang→A3, Awakening→E4, Discovery→G4
+  - Connection→A4, Acceptance→B4, Ended→D5
+- `src/audio/events.rs` - Event sound system
+  - EventSoundConfig: durations and frequencies
+  - EventSounds resource: bang_rumble, grief, transitions
+  - handle_bang_events: triggers rumble on Expansion stage
+  - handle_traveler_faded: triggers grief for Child
+  - handle_phase_transitions: triggers transition sounds
+  - EventSoundPlugin registers all event handlers
+
+### Notes
+- Prompt 36-AUDIO-EVENTS complete
+- **Phase 7 (Audio) COMPLETE**
+- 90% overall progress
+
 ## [0.7.2] - 2024-12-24
 
 ### Added
@@ -775,7 +810,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.7.2...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.7.3...HEAD
+[0.7.3]: https://github.com/watchthelight/lightwatch2/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/watchthelight/lightwatch2/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/watchthelight/lightwatch2/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/watchthelight/lightwatch2/compare/v0.6.4...v0.7.0
