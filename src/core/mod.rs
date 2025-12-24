@@ -9,7 +9,9 @@ pub mod debug_overlay;
 pub mod exposure;
 pub mod hot_reload;
 pub mod logging;
+pub mod ready_screen;
 pub mod renderer;
+pub mod state;
 pub mod time_control;
 pub mod window;
 
@@ -19,7 +21,9 @@ pub use debug_overlay::*;
 pub use exposure::*;
 pub use hot_reload::*;
 pub use logging::*;
+pub use ready_screen::*;
 pub use renderer::*;
+pub use state::*;
 pub use time_control::*;
 pub use window::*;
 
@@ -31,23 +35,45 @@ impl Plugin for CorePlugin {
         app
             // Diagnostics for FPS display
             .add_plugins(FrameTimeDiagnosticsPlugin::default())
+            // State
+            .init_state::<ExperienceState>()
             // Events
             .add_event::<PhaseChangedEvent>()
+            .add_event::<StateChangedEvent>()
             // Resources
             .init_resource::<ExperienceClock>()
+            .init_resource::<EndingTimer>()
             .init_resource::<ExposureControl>()
             .init_resource::<DebugOverlayState>()
             .init_resource::<HotReloadConfig>()
             .init_resource::<TimeControl>()
+            // System sets
+            .configure_sets(
+                Update,
+                (
+                    ReadySet.run_if(in_ready_state),
+                    RunningSet.run_if(in_running_state),
+                    EndingSet.run_if(|s: Res<State<ExperienceState>>| {
+                        *s.get() == ExperienceState::Ending
+                    }),
+                ),
+            )
             // Startup systems
-            .add_systems(Startup, (spawn_debug_overlay, setup_hot_reload))
+            .add_systems(Startup, (spawn_debug_overlay, spawn_ready_screen, setup_hot_reload))
+            // State transitions
+            .add_systems(OnEnter(ExperienceState::Running), hide_ready_screen)
             // Update systems
             .add_systems(
                 Update,
                 (
                     handle_window_close,
-                    update_clock,
-                    emit_phase_changes.after(update_clock),
+                    check_loading_complete,
+                    start_on_click.in_set(ReadySet),
+                    update_clock.in_set(RunningSet),
+                    emit_phase_changes.after(update_clock).in_set(RunningSet),
+                    check_experience_end.in_set(RunningSet),
+                    handle_ending_phase.in_set(EndingSet),
+                    log_state_transitions,
                     update_exposure,
                     update_debug_overlay,
                     toggle_debug_overlay,
@@ -66,7 +92,6 @@ impl Plugin for CorePlugin {
             ),
         );
 
-        // TODO: State machine
         // TODO: Event bus
         // TODO: Phase controller
     }
