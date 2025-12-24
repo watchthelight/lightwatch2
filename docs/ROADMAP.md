@@ -54,7 +54,7 @@ The viewer's eye into the cosmic experience.
 | 12 | CAMERA-BEHAVIORS | [x] | Drift, approach, pullback modes |
 | 13 | CAMERA-DOF | [x] | Bokeh depth of field shader |
 | 14 | CAMERA-SHAKE | [x] | Trauma-based shake system |
-| 15 | CAMERA-TRANSITIONS | [ ] | Cinematic sequences |
+| 15 | CAMERA-TRANSITIONS | [x] | Cinematic sequences |
 
 **Milestone**: Cinematic camera that breathes and responds
 
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 14-CAMERA-SHAKE
-**Next prompt**: 15-CAMERA-TRANSITIONS
-**Overall progress**: 14/40 (35%)
+**Last completed prompt**: 15-CAMERA-TRANSITIONS
+**Next prompt**: 16-TRAVELER-COMPONENTS
+**Overall progress**: 15/40 (37.5%)

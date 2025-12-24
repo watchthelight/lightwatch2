@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.4] - 2024-12-24
+
+### Added
+- `src/camera/transitions.rs` - Cinematic camera transition system
+  - CameraTransition with position, rotation, duration, easing
+  - EasingFunction enum (7 functions: Linear, EaseIn/Out, Cubic, Quart, Expo)
+  - ActiveTransition resource for state tracking
+  - TransitionPresets for phase-specific choreography:
+    - awakening_drift (8s)
+    - discovery_approach (20s)
+    - connection_settle (10s)
+    - acceptance_pullback (50s)
+  - TriggerTransitionEvent for manual control
+
+### Notes
+- Prompt 15-CAMERA-TRANSITIONS complete
+- Phase 3 (Camera) complete!
+- 37.5% overall progress
+
 ## [0.3.3] - 2024-12-24
 
 ### Added
@@ -318,7 +337,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.3.3...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.3.4...HEAD
+[0.3.4]: https://github.com/watchthelight/lightwatch2/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/watchthelight/lightwatch2/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/watchthelight/lightwatch2/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/watchthelight/lightwatch2/compare/v0.3.0...v0.3.1
