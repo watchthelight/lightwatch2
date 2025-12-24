@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.4] - 2024-12-24
+
+### Added
+- `src/travelers/particles/aura.rs` - Orbiting aura particle system
+  - TravelerAura component with per-traveler configuration
+  - AuraParticle with orbital mechanics (angle, radius, tilt, phase)
+  - spawn_aura_particles: spawns particles as children of travelers
+  - animate_aura_particles: orbital motion with pulse influence
+  - control_particle_density: adjusts visibility based on pulse
+  - fade_aura_with_traveler: fades particles during traveler fade
+- `src/travelers/particles/mod.rs` - TravelerParticlesPlugin
+- Traveler-specific aura configurations:
+  - Archivist: 60 particles, amber, steady orbit
+  - Wanderer: 40 particles, cyan, fast/erratic
+  - Keeper: 30 particles, deep orange, slow/steady
+  - Child: 80 particles, white, fast/playful
+  - Other: 20 particles, indigo, very slow/sparse
+
+### Notes
+- Prompt 20-TRAVELER-PARTICLES-AURA complete
+- 50% overall progress
+
 ## [0.4.3] - 2024-12-24
 
 ### Added
@@ -420,7 +442,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.3...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.4...HEAD
+[0.4.4]: https://github.com/watchthelight/lightwatch2/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/watchthelight/lightwatch2/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/watchthelight/lightwatch2/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/watchthelight/lightwatch2/compare/v0.4.0...v0.4.1
