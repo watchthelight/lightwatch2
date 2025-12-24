@@ -70,7 +70,7 @@ Bringing the five travelers to visual life.
 | 17 | TRAVELER-GEOMETRY | [x] | Procedural platonic solid meshes |
 | 18 | TRAVELER-MATERIALS | [x] | PBR materials, emissive glow |
 | 19 | TRAVELER-SHADERS | [x] | Custom WGSL shaders |
-| 20 | TRAVELER-PARTICLES-AURA | [ ] | Orbiting particles |
+| 20 | TRAVELER-PARTICLES-AURA | [x] | Orbiting particles |
 | 21 | TRAVELER-PARTICLES-TRAILS | [ ] | Movement trails |
 | 22 | TRAVELER-BEHAVIORS | [ ] | Rhythm, sync, grief animations |
 
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 19-TRAVELER-SHADERS
-**Next prompt**: 20-TRAVELER-PARTICLES-AURA
-**Overall progress**: 19/40 (47.5%)
+**Last completed prompt**: 20-TRAVELER-PARTICLES-AURA
+**Next prompt**: 21-TRAVELER-PARTICLES-TRAILS
+**Overall progress**: 20/40 (50%)
