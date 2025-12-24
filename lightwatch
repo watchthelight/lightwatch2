@@ -1,16 +1,70 @@
-#!/bin/bash
-# lightwatch - Run the LIGHTWATCH experience
+#!/usr/bin/env bash
+# LIGHTWATCH - Run the experience
+# Usage: ./lightwatch [--build] [--debug] [--dev]
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-# Check if release build exists
-if [ ! -f "target/release/lightwatch" ]; then
-    echo "Building LIGHTWATCH (release)..."
-    cargo build --release
+# Parse arguments
+BUILD=false
+RELEASE=true
+DEV_FEATURES=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --build|-b)
+            BUILD=true
+            shift
+            ;;
+        --debug|-d)
+            RELEASE=false
+            shift
+            ;;
+        --dev)
+            DEV_FEATURES=true
+            shift
+            ;;
+        --help|-h)
+            echo "LIGHTWATCH - A 143-second contemplative experience"
+            echo ""
+            echo "Usage: ./lightwatch [OPTIONS]"
+            echo ""
+            echo "Options:"
+            echo "  --build, -b    Force rebuild before running"
+            echo "  --debug, -d    Run debug build (slower, more logging)"
+            echo "  --dev          Enable dev features (dynamic linking)"
+            echo "  --help, -h     Show this help"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+# Determine binary path and build command
+if [ "$RELEASE" = true ]; then
+    BINARY="target/release/lightwatch"
+    BUILD_CMD="cargo build --release"
+else
+    BINARY="target/debug/lightwatch"
+    BUILD_CMD="cargo build"
+fi
+
+if [ "$DEV_FEATURES" = true ]; then
+    BUILD_CMD="$BUILD_CMD --features dev"
+fi
+
+# Build if needed or forced
+if [ "$BUILD" = true ] || [ ! -f "$BINARY" ]; then
+    echo "Building LIGHTWATCH..."
+    $BUILD_CMD
+    echo "Build complete."
 fi
 
 # Run
-exec ./target/release/lightwatch "$@"
+echo "Starting LIGHTWATCH..."
+exec "$BINARY"
