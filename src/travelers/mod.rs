@@ -23,7 +23,6 @@ pub use spawn::*;
 pub use state::*;
 
 // Re-export TravelerId from core::events
-pub use crate::core::TravelerId;
 
 /// Traveler plugin for components and lifecycle
 pub struct TravelersPlugin;

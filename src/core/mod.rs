@@ -28,7 +28,6 @@ pub use events::*;
 pub use exposure::*;
 pub use hot_reload::*;
 pub use input::*;
-pub use logging::*;
 pub use phase_controller::*;
 pub use ready_screen::*;
 pub use renderer::*;

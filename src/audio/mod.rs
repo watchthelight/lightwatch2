@@ -19,24 +19,13 @@ mod transitions;
 mod voice;
 
 pub use ambiance::CosmicAmbiance;
-pub use bang_sound::BangRumble;
 pub use engine::AudioEngine;
-pub use envelope::{Envelope, EnvelopeStage};
-pub use events::{EventSoundConfig, EventSoundPlugin, EventSounds};
+pub use envelope::Envelope;
+pub use events::EventSoundPlugin;
 pub use filter::{BiquadFilter, FilterType};
-pub use grief_sound::GriefDissonance;
-pub use leitmotif::{Contour, Leitmotif, RhythmPattern};
-pub use leitmotif_player::{LeitmotifPlayer, LeitmotifPlugin};
-pub use melody::{Melody, MelodyGenerator};
+pub use leitmotif_player::LeitmotifPlugin;
 pub use oscillator::{Oscillator, Waveform};
-pub use reverb::Reverb;
-pub use scale::{midi_to_freq, Scale, ScaleDegree, A4, D_PENTATONIC};
-pub use silence::{SilenceManager, SilenceState};
-pub use spatial::{
-    calculate_attenuation, calculate_doppler, calculate_panning, AudioListener,
-    SpatialAudioConfig, SpatialAudioPlugin, SpatialAudioSource,
-};
-pub use transitions::TransitionSound;
+pub use spatial::SpatialAudioPlugin;
 pub use voice::Voice;
 
 use bevy::prelude::*;

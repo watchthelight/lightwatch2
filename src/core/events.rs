@@ -7,8 +7,6 @@ use bevy::prelude::*;
 // PHASE EVENTS
 // ============================================================================
 
-/// Phase transition event (re-exported from clock.rs)
-pub use super::PhaseChangedEvent;
 
 /// Event fired at specific moments within phases
 #[derive(Event, Debug, Clone)]

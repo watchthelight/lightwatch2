@@ -16,7 +16,6 @@ pub use api::TransmissionCommands;
 pub use config::{TextConfig, TextPosition};
 pub use final_messages::FinalMessageState;
 pub use fragment_display::FragmentState;
-pub use fragments::{get_traveler_fragments, traveler_display_name, TravelerFragment};
 pub use grief::GriefTextState;
 pub use queue::TransmissionQueue;
 pub use signal::{SignalConfig, SignalState};
