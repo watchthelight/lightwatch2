@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2024-12-24
+
+### Added
+- `src/core/state.rs` - Experience state machine
+  - ExperienceState: Loading → Ready → Running → Ending → Ended
+  - StateChangedEvent for state transitions
+  - System sets: ReadySet, RunningSet, EndingSet
+  - Run conditions: in_ready_state, in_running_state, etc.
+  - EndingTimer for 3-second fade-out
+- `src/core/ready_screen.rs` - "click to begin" overlay
+  - Black screen with centered text
+  - Despawns when experience starts
+
+### Changed
+- Clock now runs only in Running state
+- State transitions logged via wide events
+
+### Notes
+- Prompt 07-STATE-MACHINE complete
+- Click to start experience functionality working
+
 ## [0.2.0] - 2024-12-24
 
 ### Added
@@ -176,7 +197,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/watchthelight/lightwatch2/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/watchthelight/lightwatch2/compare/v0.1.4...v0.2.0
 [0.1.4]: https://github.com/watchthelight/lightwatch2/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/watchthelight/lightwatch2/compare/v0.1.2...v0.1.3
