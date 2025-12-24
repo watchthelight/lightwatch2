@@ -4,18 +4,21 @@ use bevy::prelude::*;
 
 mod core;
 mod expansion;
+mod god_rays;
 
 pub use core::*;
 pub use expansion::*;
+pub use god_rays::*;
 
 /// Bang plugin for the origin explosion sequence
 pub struct BangPlugin;
 
 impl Plugin for BangPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(BangCorePlugin).add_plugins(ExpansionPlugin);
+        app.add_plugins(BangCorePlugin)
+            .add_plugins(ExpansionPlugin)
+            .add_plugins(GodRaysPlugin);
 
-        // TODO: Screen-space god rays
         // TODO: Expanding shockwave
         // TODO: Debris particles (5000)
     }
