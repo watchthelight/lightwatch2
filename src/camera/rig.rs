@@ -63,10 +63,10 @@ pub fn spawn_camera(mut commands: Commands) {
                 hdr: true,
                 ..default()
             },
+            tonemapping: Tonemapping::AcesFitted,
             transform: Transform::from_translation(position).looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
         },
-        Tonemapping::AcesFitted,
         BloomSettings {
             intensity: 0.15,
             low_frequency_boost: 0.7,
