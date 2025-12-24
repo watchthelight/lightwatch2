@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2024-12-24
+
+### Added
+- `src/travelers/geometry.rs` - Procedural Platonic solid mesh generation
+  - generate_icosahedron (Archivist - 20 faces)
+  - generate_tetrahedron (Wanderer - 4 faces)
+  - generate_cube (Keeper - 6 faces)
+  - generate_octahedron (Child - 8 faces)
+  - generate_dodecahedron (Other - 12 faces)
+  - Proper normals and spherical UV projection
+  - Subtle vertex noise for organic feel
+  - TravelerLayers: core, shell (1.1x), edges (wireframe)
+  - TravelerMeshCache for handle caching
+
+### Notes
+- Prompt 17-TRAVELER-GEOMETRY complete
+- 42.5% overall progress
+
 ## [0.4.0] - 2024-12-24
 
 ### Added
@@ -365,7 +383,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/watchthelight/lightwatch2/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/watchthelight/lightwatch2/compare/v0.3.4...v0.4.0
 [0.3.4]: https://github.com/watchthelight/lightwatch2/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/watchthelight/lightwatch2/compare/v0.3.2...v0.3.3

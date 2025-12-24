@@ -67,7 +67,7 @@ Bringing the five travelers to visual life.
 | # | Prompt | Status | Description |
 |---|--------|--------|-------------|
 | 16 | TRAVELER-COMPONENTS | [x] | ECS components, spawn system |
-| 17 | TRAVELER-GEOMETRY | [ ] | Procedural platonic solid meshes |
+| 17 | TRAVELER-GEOMETRY | [x] | Procedural platonic solid meshes |
 | 18 | TRAVELER-MATERIALS | [ ] | PBR materials, emissive glow |
 | 19 | TRAVELER-SHADERS | [ ] | Custom WGSL shaders |
 | 20 | TRAVELER-PARTICLES-AURA | [ ] | Orbiting particles |
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 16-TRAVELER-COMPONENTS
-**Next prompt**: 17-TRAVELER-GEOMETRY
-**Overall progress**: 16/40 (40%)
+**Last completed prompt**: 17-TRAVELER-GEOMETRY
+**Next prompt**: 18-TRAVELER-MATERIALS
+**Overall progress**: 17/40 (42.5%)
