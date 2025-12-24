@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2024-12-24
+
+### Added
+- `src/camera/behavior.rs` - Camera behavior system
+  - CameraBehaviorState tracks current/previous with transitions
+  - BehaviorParams for drift, approach, pullback tuning
+  - Smooth ease_in_out_cubic blending between behaviors
+  - Static, Drift, Approach, Pullback modes
+- Behaviors respond to CameraBehaviorChangedEvent from phase controller
+
+### Notes
+- Prompt 12-CAMERA-BEHAVIORS complete
+- 30% overall progress milestone
+
 ## [0.3.0] - 2024-12-24
 
 ### Added
@@ -274,7 +288,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/watchthelight/lightwatch2/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/watchthelight/lightwatch2/compare/v0.2.4...v0.3.0
 [0.2.4]: https://github.com/watchthelight/lightwatch2/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/watchthelight/lightwatch2/compare/v0.2.2...v0.2.3
