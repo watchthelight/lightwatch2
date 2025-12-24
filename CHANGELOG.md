@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2024-12-24
+
+### Added
+- `src/bang/core.rs` - Bang core light explosion effect
+  - BangCore component: intensity, expansion, temperature
+  - BangConfig: precise timeline (start 2s, peak 4s, complete 10s)
+  - spawn_bang_core: ico sphere with emissive/additive material
+  - update_bang_core: phase-based animations
+    - Point of light (2.0-2.5s)
+    - Building intensity (2.5-3.0s)
+    - Explosive expansion (3.0-4.0s) with ease_out_expo
+    - Deceleration/cooling (4.0-6.0s)
+    - Settling to void (6.0-10.0s)
+  - temperature_to_color: white -> amber -> red gradient
+  - BangCorePlugin registers all systems
+
+### Notes
+- Prompt 28-BANG-CORE complete
+- Phase 6 (The Bang) begun
+- 70% overall progress
+
 ## [0.5.4] - 2024-12-24
 
 ### Added
@@ -578,7 +599,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.5.4...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/watchthelight/lightwatch2/compare/v0.5.4...v0.6.0
 [0.5.4]: https://github.com/watchthelight/lightwatch2/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/watchthelight/lightwatch2/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/watchthelight/lightwatch2/compare/v0.5.1...v0.5.2
