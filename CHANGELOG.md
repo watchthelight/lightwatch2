@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.4] - 2024-12-24
+
+### Added
+- `src/core/input.rs` - Input handler system
+  - InputConfig resource (enabled, hide_cursor)
+  - handle_click_to_start (any mouse button)
+  - Cursor hides during experience, restores on end
+  - Extended dev controls: R reset, arrow scrubbing
+  - F1 dev help display
+  - Keys 7/8 for near-end phase jumps
+- InputPlugin for centralized input handling
+
+### Changed
+- Removed redundant start_on_click from state.rs
+
+### Notes
+- Prompt 10-INPUT-HANDLER complete
+- Phase 2 (Core Systems) complete!
+- 25% overall progress milestone
+
 ## [0.2.3] - 2024-12-24
 
 ### Added
@@ -235,7 +255,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.2.4...HEAD
+[0.2.4]: https://github.com/watchthelight/lightwatch2/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/watchthelight/lightwatch2/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/watchthelight/lightwatch2/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/watchthelight/lightwatch2/compare/v0.2.0...v0.2.1

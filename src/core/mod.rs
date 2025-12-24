@@ -9,6 +9,7 @@ pub mod debug_overlay;
 pub mod events;
 pub mod exposure;
 pub mod hot_reload;
+pub mod input;
 pub mod logging;
 pub mod phase_controller;
 pub mod ready_screen;
@@ -23,6 +24,7 @@ pub use debug_overlay::*;
 pub use events::*;
 pub use exposure::*;
 pub use hot_reload::*;
+pub use input::*;
 pub use logging::*;
 pub use phase_controller::*;
 pub use ready_screen::*;
@@ -43,6 +45,8 @@ impl Plugin for CorePlugin {
             .add_plugins(EventsPlugin)
             // Phase controller
             .add_plugins(PhaseControllerPlugin)
+            // Input handling
+            .add_plugins(InputPlugin)
             // State
             .init_state::<ExperienceState>()
             // Events
@@ -76,7 +80,6 @@ impl Plugin for CorePlugin {
                 (
                     handle_window_close,
                     check_loading_complete,
-                    start_on_click.in_set(ReadySet),
                     update_clock.in_set(RunningSet),
                     emit_phase_changes.after(update_clock).in_set(RunningSet),
                     check_experience_end.in_set(RunningSet),
