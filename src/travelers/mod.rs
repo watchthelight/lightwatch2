@@ -6,6 +6,7 @@ mod geometry;
 mod identity;
 mod lifecycle;
 mod materials;
+mod shader_material;
 mod spawn;
 mod state;
 
@@ -13,6 +14,7 @@ pub use geometry::*;
 pub use identity::*;
 pub use lifecycle::*;
 pub use materials::*;
+pub use shader_material::*;
 pub use spawn::*;
 pub use state::*;
 
@@ -24,7 +26,8 @@ pub struct TravelersPlugin;
 
 impl Plugin for TravelersPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<TravelerRegistry>()
+        app.add_plugins(TravelerShaderPlugin)
+            .init_resource::<TravelerRegistry>()
             .init_resource::<TravelerMeshCache>()
             .init_resource::<TravelerMaterialCache>()
             .add_systems(
@@ -45,7 +48,6 @@ impl Plugin for TravelersPlugin {
                 ),
             );
 
-        // TODO: Custom shaders
         // TODO: Aura particles
         // TODO: Trail particles
         // TODO: Behaviors (rhythm, sync, grief)
