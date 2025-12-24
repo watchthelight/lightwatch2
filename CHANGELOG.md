@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.3] - 2024-12-24
+
+### Added
+- `src/camera/shake.rs` - Trauma-based shake system
+  - CameraShake with trauma accumulation and decay
+  - Perlin noise (fbm_noise) for organic motion
+  - ShakePresets: BANG_PEAK, GRIEF, SUBTLE, IMPACT
+  - Affects both position and rotation
+  - Responds to CameraShakeEvent
+
+### Notes
+- Prompt 14-CAMERA-SHAKE complete
+- 35% overall progress
+
 ## [0.3.2] - 2024-12-24
 
 ### Added
@@ -304,7 +318,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.3.2...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.3.3...HEAD
+[0.3.3]: https://github.com/watchthelight/lightwatch2/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/watchthelight/lightwatch2/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/watchthelight/lightwatch2/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/watchthelight/lightwatch2/compare/v0.2.4...v0.3.0
