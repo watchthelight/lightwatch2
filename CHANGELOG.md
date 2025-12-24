@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.3] - 2024-12-24
+
+### Added
+- Custom WGSL shaders for ethereal traveler rendering
+  - `traveler_glow.wgsl`: Fresnel rim, inner glow, pulse, grief
+  - `traveler_shell.wgsl`: translucent shell with iridescence
+  - `traveler_edge.wgsl`: glowing wireframe with pulse
+- `src/travelers/shader_material.rs` - Custom material types
+  - TravelerGlowMaterial with Fresnel power, rim color
+  - TravelerShellMaterial with refraction, IOR
+  - TravelerEdgeMaterial with glow intensity
+  - update_shader_time system
+  - sync_pulse_to_shader_materials system
+  - TravelerShaderPlugin
+
+### Notes
+- Prompt 19-TRAVELER-SHADERS complete
+- 47.5% overall progress
+
 ## [0.4.2] - 2024-12-24
 
 ### Added
@@ -401,7 +420,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.2...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.4.3...HEAD
+[0.4.3]: https://github.com/watchthelight/lightwatch2/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/watchthelight/lightwatch2/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/watchthelight/lightwatch2/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/watchthelight/lightwatch2/compare/v0.3.4...v0.4.0
