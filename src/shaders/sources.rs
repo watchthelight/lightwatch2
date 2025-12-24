@@ -26,3 +26,6 @@ pub const BANG_SHOCKWAVE: &str = include_str!("../../assets/shaders/bang_shockwa
 
 /// God ray shader - volumetric light beams
 pub const BANG_GODRAY: &str = include_str!("../../assets/shaders/bang_godray.wgsl");
+
+/// Depth of field post-process shader
+pub const DOF: &str = include_str!("../../assets/shaders/dof.wgsl");
