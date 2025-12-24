@@ -34,7 +34,7 @@ The backbone of the experience—timing, state, and events.
 
 | # | Prompt | Status | Description |
 |---|--------|--------|-------------|
-| 06 | CLOCK-SYSTEM | [ ] | 143-second timeline, phase detection |
+| 06 | CLOCK-SYSTEM | [x] | 143-second timeline, phase detection |
 | 07 | STATE-MACHINE | [ ] | Experience states, phase enum |
 | 08 | EVENT-BUS | [ ] | Custom events, wide event emission |
 | 09 | PHASE-CONTROLLER | [ ] | Phase transitions, lerped params |
@@ -181,6 +181,6 @@ Final assembly and shipping.
 
 ## Current Status
 
-**Last completed prompt**: 05-BUILD-SYSTEM
-**Next prompt**: 06-CLOCK-SYSTEM
-**Overall progress**: 5/40 (12.5%)
+**Last completed prompt**: 06-CLOCK-SYSTEM
+**Next prompt**: 07-STATE-MACHINE
+**Overall progress**: 6/40 (15%)

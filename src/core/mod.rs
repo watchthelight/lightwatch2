@@ -4,6 +4,7 @@ use bevy::diagnostic::FrameTimeDiagnosticsPlugin;
 use bevy::prelude::*;
 
 pub mod build_info;
+pub mod clock;
 pub mod debug_overlay;
 pub mod exposure;
 pub mod hot_reload;
@@ -13,6 +14,7 @@ pub mod time_control;
 pub mod window;
 
 pub use build_info::*;
+pub use clock::*;
 pub use debug_overlay::*;
 pub use exposure::*;
 pub use hot_reload::*;
@@ -29,7 +31,10 @@ impl Plugin for CorePlugin {
         app
             // Diagnostics for FPS display
             .add_plugins(FrameTimeDiagnosticsPlugin::default())
+            // Events
+            .add_event::<PhaseChangedEvent>()
             // Resources
+            .init_resource::<ExperienceClock>()
             .init_resource::<ExposureControl>()
             .init_resource::<DebugOverlayState>()
             .init_resource::<HotReloadConfig>()
@@ -41,6 +46,8 @@ impl Plugin for CorePlugin {
                 Update,
                 (
                     handle_window_close,
+                    update_clock,
+                    emit_phase_changes.after(update_clock),
                     update_exposure,
                     update_debug_overlay,
                     toggle_debug_overlay,
@@ -55,10 +62,10 @@ impl Plugin for CorePlugin {
                 toggle_fullscreen,
                 manual_reload_trigger,
                 time_control::handle_time_control,
+                clear_scrub_position.after(update_clock),
             ),
         );
 
-        // TODO: Clock system
         // TODO: State machine
         // TODO: Event bus
         // TODO: Phase controller
