@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.1] - 2024-12-24
+
+### Added
+- `src/audio/scale.rs` - D pentatonic scale system
+  - A4 constant (440Hz), midi_to_freq conversion
+  - D_PENTATONIC intervals: D, E, G, A, B (0, 2, 5, 7, 10 semitones)
+  - ScaleDegree enum: Root, Second, Third, Fifth, Sixth
+  - Scale struct with octave-aware frequency lookup
+- `src/audio/leitmotif.rs` - Traveler leitmotif definitions
+  - Contour enum: Ascending, Descending, Arch, Valley, Static
+  - RhythmPattern: durations and rest positions
+  - Leitmotif struct: preferred degrees, contour, octave range, tempo
+  - Per-traveler leitmotifs:
+    - Archivist: slow arch, lower register, 60 BPM
+    - Wanderer: ascending, wide range, varied rhythm, 75 BPM
+    - Keeper: static ostinato, steady, 55 BPM
+    - Child: valley contour, high/playful, 90 BPM
+    - Other: descending, sparse, wide leaps, 45 BPM
+- `src/audio/melody.rs` - Procedural melody generator
+  - MelodyGenerator with seeded RNG (ChaCha8)
+  - Contour-based note selection
+  - Interval tendency and preferred degree biasing
+  - Octave wrapping and clamping
+- `src/audio/leitmotif_player.rs` - Playback system
+  - LeitmotifPlayer resource: melody/timing per traveler
+  - start(), stop(): control traveler melodies
+  - update(): returns notes to play based on tempo/rhythm
+  - update_leitmotifs system integrates with AudioEngine
+  - LeitmotifPlugin registers player and update system
+
+### Notes
+- Prompt 34-AUDIO-LEITMOTIFS complete
+- 85% overall progress
+
 ## [0.7.0] - 2024-12-24
 
 ### Added
@@ -712,7 +746,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/watchthelight/lightwatch2/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/watchthelight/lightwatch2/compare/v0.6.4...v0.7.0
 [0.6.4]: https://github.com/watchthelight/lightwatch2/compare/v0.6.3...v0.6.4
 [0.6.3]: https://github.com/watchthelight/lightwatch2/compare/v0.6.2...v0.6.3
