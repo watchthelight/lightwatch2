@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2024-12-24
+
+### Added
+- `src/core/clock.rs` - Experience clock system
+  - Phase enum with 6 phases (Signal, Bang, Awakening, Discovery, Connection, Acceptance)
+  - ExperienceClock resource with 143-second timeline
+  - Phase detection and transition tracking
+  - PhaseChangedEvent for phase transitions
+  - Dev-only pause, resume, time scaling, and jump controls
+- Wide event logging for phase transitions
+
+### Changed
+- Debug overlay now shows real clock data (elapsed, phase, progress, running state)
+- DebugOverlayState simplified (removed redundant phase/elapsed fields)
+
+### Notes
+- Prompt 06-CLOCK-SYSTEM complete
+- Phase 2 (Core Systems) begun
+- Clock integrates with TimeControl from prompt 04
+
 ## [0.1.4] - 2024-12-24
 
 ### Added
@@ -156,7 +176,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This marks the beginning of LIGHTWATCH development
 - A 143-second real-time art piece built with Bevy (Rust)
 
-[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/watchthelight/lightwatch2/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/watchthelight/lightwatch2/compare/v0.1.4...v0.2.0
 [0.1.4]: https://github.com/watchthelight/lightwatch2/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/watchthelight/lightwatch2/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/watchthelight/lightwatch2/compare/v0.1.1...v0.1.2
