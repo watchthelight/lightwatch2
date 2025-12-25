@@ -5,6 +5,7 @@
 use bevy::prelude::*;
 
 use super::CameraRig;
+use crate::core::easing::{ease_in_out_cubic, smooth_lerp_factor};
 use crate::core::{CameraBehavior, CameraBehaviorChangedEvent};
 use crate::wide_event;
 
@@ -106,7 +107,11 @@ pub fn update_behavior_transition(time: Res<Time>, mut state: ResMut<CameraBehav
 }
 
 /// Apply drift behavior
-pub fn apply_drift_behavior(state: Res<CameraBehaviorState>, mut rigs: Query<&mut CameraRig>) {
+pub fn apply_drift_behavior(
+    time: Res<Time>,
+    state: Res<CameraBehaviorState>,
+    mut rigs: Query<&mut CameraRig>,
+) {
     if state.current != CameraBehavior::Drift && state.previous != CameraBehavior::Drift {
         return;
     }
@@ -123,6 +128,9 @@ pub fn apply_drift_behavior(state: Res<CameraBehaviorState>, mut rigs: Query<&mu
 
     let target_offset = Vec3::new(drift_x, drift_y, 0.0);
 
+    // Frame-rate independent smoothing factor
+    let smooth_factor = smooth_lerp_factor(time.delta_seconds(), 6.0);
+
     for mut rig in rigs.iter_mut() {
         // Blend based on transition
         let blend = if state.current == CameraBehavior::Drift {
@@ -131,7 +139,7 @@ pub fn apply_drift_behavior(state: Res<CameraBehaviorState>, mut rigs: Query<&mu
             1.0 - ease_in_out_cubic(state.transition)
         };
 
-        rig.behavior_offset = rig.behavior_offset.lerp(target_offset * blend, 0.1);
+        rig.behavior_offset = rig.behavior_offset.lerp(target_offset * blend, smooth_factor);
     }
 }
 
@@ -222,11 +230,3 @@ pub fn reset_static_behavior(
     }
 }
 
-/// Easing function for smooth transitions
-fn ease_in_out_cubic(t: f32) -> f32 {
-    if t < 0.5 {
-        4.0 * t * t * t
-    } else {
-        1.0 - (-2.0 * t + 2.0).powi(3) / 2.0
-    }
-}
