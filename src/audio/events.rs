@@ -1,31 +1,26 @@
-//! Audio event system - bang rumble, grief, transitions
+//! Audio event system - triggers for bang rumble, grief, transitions
+//!
+//! This module listens to game events and sends triggers to the audio thread.
+//! The actual sound generation happens in output.rs on the audio thread.
 
 use bevy::prelude::*;
 
-use super::bang_sound::BangRumble;
-use super::grief_sound::GriefDissonance;
 use super::output::{AudioTrigger, AudioTriggerQueue};
 use super::silence::SilenceManager;
-use super::transitions::TransitionSound;
 use crate::core::{BangEvent, BangStage, PhaseChangedEvent, TravelerId, TravelerFadedEvent};
 
-/// Event sound configuration
+/// Event sound configuration (for reference/future tuning)
 #[derive(Resource)]
 pub struct EventSoundConfig {
     /// Bang rumble duration
-    #[allow(dead_code)]
     pub bang_duration: f32,
     /// Bang rumble base frequency
-    #[allow(dead_code)]
     pub bang_frequency: f32,
     /// Grief dissonance duration
-    #[allow(dead_code)]
     pub grief_duration: f32,
     /// Grief frequencies (dissonant cluster)
-    #[allow(dead_code)]
     pub grief_frequencies: [f32; 3],
     /// Silence fade duration
-    #[allow(dead_code)]
     pub silence_fade: f32,
 }
 
@@ -41,23 +36,13 @@ impl Default for EventSoundConfig {
     }
 }
 
-/// Event sound state
-#[derive(Resource, Default)]
-pub struct EventSounds {
-    pub bang_rumble: BangRumble,
-    pub grief: GriefDissonance,
-    pub transitions: TransitionSound,
-}
-
-/// Handle bang events
+/// Handle bang events - sends trigger to audio thread
 pub fn handle_bang_events(
     mut events: EventReader<BangEvent>,
-    mut sounds: ResMut<EventSounds>,
     trigger_queue: Res<AudioTriggerQueue>,
 ) {
     for event in events.read() {
         if event.stage == BangStage::Expansion {
-            sounds.bang_rumble.trigger();
             trigger_queue.send(AudioTrigger::BangRumble);
             info!(target: "lightwatch::audio", "Bang rumble triggered");
         }
@@ -67,12 +52,10 @@ pub fn handle_bang_events(
 /// Handle traveler faded events (grief for Child)
 pub fn handle_traveler_faded(
     mut events: EventReader<TravelerFadedEvent>,
-    mut sounds: ResMut<EventSounds>,
     trigger_queue: Res<AudioTriggerQueue>,
 ) {
     for event in events.read() {
         if event.id == TravelerId::Child {
-            sounds.grief.trigger();
             trigger_queue.send(AudioTrigger::GriefDissonance);
             info!(target: "lightwatch::audio", "Grief dissonance triggered for Child");
         }
@@ -82,18 +65,16 @@ pub fn handle_traveler_faded(
 /// Handle phase transitions
 pub fn handle_phase_transitions(
     mut events: EventReader<PhaseChangedEvent>,
-    mut sounds: ResMut<EventSounds>,
     trigger_queue: Res<AudioTriggerQueue>,
 ) {
     for event in events.read() {
-        sounds.transitions.trigger_for_phase(event.to);
         trigger_queue.send(AudioTrigger::PhaseTransition(event.to));
         info!(target: "lightwatch::audio", "Phase transition sound: {:?}", event.to);
     }
 }
 
-/// Update event sounds
-pub fn update_event_sounds(time: Res<Time>, mut silence: ResMut<SilenceManager>) {
+/// Update silence manager
+pub fn update_silence(time: Res<Time>, mut silence: ResMut<SilenceManager>) {
     let dt = time.delta_seconds();
     silence.update(dt);
 }
@@ -104,7 +85,6 @@ pub struct EventSoundPlugin;
 impl Plugin for EventSoundPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<EventSoundConfig>()
-            .init_resource::<EventSounds>()
             .init_resource::<SilenceManager>()
             .add_systems(
                 Update,
@@ -112,7 +92,7 @@ impl Plugin for EventSoundPlugin {
                     handle_bang_events,
                     handle_traveler_faded,
                     handle_phase_transitions,
-                    update_event_sounds,
+                    update_silence,
                 ),
             );
     }
