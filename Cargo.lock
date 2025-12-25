@@ -2561,6 +2561,7 @@ version = "1.0.0"
 dependencies = [
  "bevy",
  "bevy_kira_audio",
+ "cpal",
  "criterion",
  "glam 0.27.0",
  "instant",
