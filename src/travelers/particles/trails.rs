@@ -258,15 +258,16 @@ pub fn update_trail_particles(
     }
 }
 
-/// Activate/deactivate trails based on phase
+/// Activate/deactivate trails based on phase and adjust properties
 pub fn control_trail_activation(
     clock: Res<ExperienceClock>,
-    mut trails: Query<(&Traveler, &mut TravelerTrail)>,
+    mut trails: Query<(&Traveler, &mut TravelerTrail, &crate::travelers::TravelerVisibility)>,
 ) {
     let phase = clock.phase();
+    let progress = clock.phase_progress();
 
-    for (traveler, mut trail) in trails.iter_mut() {
-        // Trails are most visible during movement phases
+    for (traveler, mut trail, visibility) in trails.iter_mut() {
+        // Trails are active during movement phases
         trail.active = matches!(
             phase,
             Phase::Discovery | Phase::Connection | Phase::Acceptance
@@ -275,6 +276,22 @@ pub fn control_trail_activation(
         // The Other always has trails (otherworldly presence)
         if traveler.id == TravelerId::Other {
             trail.active = true;
+        }
+
+        // During Acceptance, make trails more ethereal as travelers fade
+        if phase == Phase::Acceptance {
+            // Shorter duration for ethereal feel
+            let base_duration = TravelerTrail::for_traveler(traveler.id).fade_duration;
+            trail.fade_duration = base_duration * (0.4 + 0.6 * (1.0 - progress));
+
+            // Smaller size as travelers fade
+            let base_size = TravelerTrail::for_traveler(traveler.id).size;
+            trail.size = base_size * (0.5 + 0.5 * visibility.opacity);
+        } else {
+            // Reset to defaults in other phases
+            let default_trail = TravelerTrail::for_traveler(traveler.id);
+            trail.fade_duration = default_trail.fade_duration;
+            trail.size = default_trail.size;
         }
     }
 }
