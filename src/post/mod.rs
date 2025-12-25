@@ -15,6 +15,7 @@ mod chromatic_node;
 mod config;
 mod dynamic;
 mod film_grain_node;
+mod god_rays_node;
 mod materials;
 mod vignette_node;
 
@@ -22,6 +23,7 @@ pub use chromatic_node::{ChromaticAberrationPlugin, ChromaticAberrationSettings}
 pub use config::*;
 pub use dynamic::DynamicPostProcess;
 pub use film_grain_node::{FilmGrainPlugin, FilmGrainSettings};
+pub use god_rays_node::{GodRaysRenderPlugin, GodRaysSettings};
 pub use materials::*;
 pub use vignette_node::{VignettePlugin, VignetteSettings};
 
@@ -36,7 +38,13 @@ impl Plugin for PostPlugin {
         app.init_resource::<PostProcessConfig>()
             .init_resource::<DynamicPostProcess>()
             // Render graph post-processing nodes
-            .add_plugins((ChromaticAberrationPlugin, VignettePlugin, FilmGrainPlugin))
+            // Order: Tonemapping → CA → GodRays → Vignette → FilmGrain → End
+            .add_plugins((
+                ChromaticAberrationPlugin,
+                GodRaysRenderPlugin,
+                VignettePlugin,
+                FilmGrainPlugin,
+            ))
             // Register custom material types (for future render integration)
             .add_plugins((
                 Material2dPlugin::<ChromaticAberrationMaterial>::default(),
@@ -53,6 +61,7 @@ impl Plugin for PostPlugin {
                     sync_chromatic_settings,
                     sync_vignette_settings,
                     sync_film_grain_settings,
+                    sync_god_rays_settings,
                 ),
             );
 
@@ -90,5 +99,21 @@ fn sync_film_grain_settings(
         settings.intensity = dynamic.grain_intensity;
         // Animate the grain by updating time
         settings.time = time.elapsed_seconds();
+    }
+}
+
+/// Sync GodRaysSettings component with bang GodRayState
+fn sync_god_rays_settings(
+    god_ray_state: Res<crate::bang::GodRayState>,
+    god_ray_config: Res<crate::bang::GodRayConfig>,
+    mut cameras: Query<&mut GodRaysSettings>,
+) {
+    for mut settings in cameras.iter_mut() {
+        settings.light_position = god_ray_state.light_position;
+        settings.intensity = god_ray_state.current_intensity;
+        settings.decay = god_ray_config.decay;
+        settings.density = god_ray_config.density;
+        settings.samples = god_ray_config.samples;
+        settings.exposure = god_ray_config.exposure;
     }
 }

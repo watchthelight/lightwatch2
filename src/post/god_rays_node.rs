@@ -1,11 +1,11 @@
-//! Chromatic aberration render node
+//! God rays render node
 //!
-//! Implements a render graph node for chromatic aberration post-processing.
-//! This samples the rendered scene and applies RGB channel separation.
+//! Implements a render graph node for radial light scattering.
+//! Creates volumetric light beams emanating from bang center.
 
 use bevy::{
     core_pipeline::{
-        core_3d::graph::{Core3d, Node3d},
+        core_3d::graph::Core3d,
         fullscreen_vertex_shader::fullscreen_shader_vertex_state,
     },
     ecs::query::QueryItem,
@@ -15,7 +15,9 @@ use bevy::{
             ComponentUniforms, DynamicUniformIndex, ExtractComponent, ExtractComponentPlugin,
             UniformComponentPlugin,
         },
-        render_graph::{NodeRunError, RenderGraphApp, RenderGraphContext, RenderLabel, ViewNode, ViewNodeRunner},
+        render_graph::{
+            NodeRunError, RenderGraphApp, RenderGraphContext, RenderLabel, ViewNode, ViewNodeRunner,
+        },
         render_resource::{
             binding_types::{sampler, texture_2d, uniform_buffer},
             BindGroupEntries, BindGroupLayout, BindGroupLayoutEntries, CachedRenderPipelineId,
@@ -31,38 +33,54 @@ use bevy::{
     },
 };
 
-/// Label for the chromatic aberration node in the render graph
-#[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
-pub struct ChromaticAberrationLabel;
+use super::chromatic_node::ChromaticAberrationLabel;
+use super::vignette_node::VignetteLabel;
 
-/// Component that controls chromatic aberration settings per camera
-#[derive(Component, Default, Clone, Copy, ExtractComponent, ShaderType)]
-pub struct ChromaticAberrationSettings {
+/// Label for the god rays node in the render graph
+#[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
+pub struct GodRaysLabel;
+
+/// Component that controls god ray settings per camera
+/// Layout must match the WGSL GodRaySettings struct
+#[derive(Component, Clone, Copy, ExtractComponent, ShaderType)]
+pub struct GodRaysSettings {
+    /// Light source position in screen space (0-1)
+    pub light_position: Vec2,
+    /// Effect intensity (0 = off)
     pub intensity: f32,
-    pub center_x: f32,
-    pub center_y: f32,
+    /// Decay per sample (0.9-0.99)
+    pub decay: f32,
+    /// Ray density
+    pub density: f32,
+    /// Number of samples
+    pub samples: i32,
+    /// Exposure multiplier
+    pub exposure: f32,
     pub _padding: f32,
 }
 
-impl ChromaticAberrationSettings {
-    pub fn new(intensity: f32) -> Self {
+impl Default for GodRaysSettings {
+    fn default() -> Self {
         Self {
-            intensity,
-            center_x: 0.5,
-            center_y: 0.5,
+            light_position: Vec2::new(0.5, 0.5),
+            intensity: 0.0, // Off by default
+            decay: 0.96,
+            density: 0.8,
+            samples: 50,
+            exposure: 0.3,
             _padding: 0.0,
         }
     }
 }
 
-/// Plugin that sets up chromatic aberration post-processing
-pub struct ChromaticAberrationPlugin;
+/// Plugin that sets up god ray post-processing render node
+pub struct GodRaysRenderPlugin;
 
-impl Plugin for ChromaticAberrationPlugin {
+impl Plugin for GodRaysRenderPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
-            ExtractComponentPlugin::<ChromaticAberrationSettings>::default(),
-            UniformComponentPlugin::<ChromaticAberrationSettings>::default(),
+            ExtractComponentPlugin::<GodRaysSettings>::default(),
+            UniformComponentPlugin::<GodRaysSettings>::default(),
         ));
 
         let Some(render_app) = app.get_sub_app_mut(RenderApp) else {
@@ -70,13 +88,11 @@ impl Plugin for ChromaticAberrationPlugin {
         };
 
         render_app
-            .add_render_graph_node::<ViewNodeRunner<ChromaticAberrationNode>>(
-                Core3d,
-                ChromaticAberrationLabel,
-            )
-            // Only add edge from Tonemapping to CA
-            // God rays will add edge from CA to next node
-            .add_render_graph_edge(Core3d, Node3d::Tonemapping, ChromaticAberrationLabel);
+            .add_render_graph_node::<ViewNodeRunner<GodRaysNode>>(Core3d, GodRaysLabel)
+            // Insert between chromatic aberration and vignette
+            // CA → GodRays → Vignette → FilmGrain → End
+            .add_render_graph_edge(Core3d, ChromaticAberrationLabel, GodRaysLabel)
+            .add_render_graph_edge(Core3d, GodRaysLabel, VignetteLabel);
     }
 
     fn finish(&self, app: &mut App) {
@@ -84,18 +100,18 @@ impl Plugin for ChromaticAberrationPlugin {
             return;
         };
 
-        render_app.init_resource::<ChromaticAberrationPipeline>();
+        render_app.init_resource::<GodRaysPipeline>();
     }
 }
 
-/// The render node for chromatic aberration
+/// The render node for god rays
 #[derive(Default)]
-pub struct ChromaticAberrationNode;
+pub struct GodRaysNode;
 
-impl ViewNode for ChromaticAberrationNode {
+impl ViewNode for GodRaysNode {
     type ViewQuery = (
         &'static ViewTarget,
-        &'static DynamicUniformIndex<ChromaticAberrationSettings>,
+        &'static DynamicUniformIndex<GodRaysSettings>,
     );
 
     fn run(
@@ -105,11 +121,11 @@ impl ViewNode for ChromaticAberrationNode {
         (view_target, settings_index): QueryItem<Self::ViewQuery>,
         world: &World,
     ) -> Result<(), NodeRunError> {
-        let chromatic_pipeline = world.resource::<ChromaticAberrationPipeline>();
+        let god_rays_pipeline = world.resource::<GodRaysPipeline>();
         let pipeline_cache = world.resource::<PipelineCache>();
-        let settings_uniforms = world.resource::<ComponentUniforms<ChromaticAberrationSettings>>();
+        let settings_uniforms = world.resource::<ComponentUniforms<GodRaysSettings>>();
 
-        let Some(pipeline) = pipeline_cache.get_render_pipeline(chromatic_pipeline.pipeline_id)
+        let Some(pipeline) = pipeline_cache.get_render_pipeline(god_rays_pipeline.pipeline_id)
         else {
             return Ok(());
         };
@@ -121,17 +137,17 @@ impl ViewNode for ChromaticAberrationNode {
         let post_process = view_target.post_process_write();
 
         let bind_group = render_context.render_device().create_bind_group(
-            "chromatic_aberration_bind_group",
-            &chromatic_pipeline.layout,
+            "god_rays_bind_group",
+            &god_rays_pipeline.layout,
             &BindGroupEntries::sequential((
                 post_process.source,
-                &chromatic_pipeline.sampler,
+                &god_rays_pipeline.sampler,
                 settings_binding.clone(),
             )),
         );
 
         let mut render_pass = render_context.begin_tracked_render_pass(RenderPassDescriptor {
-            label: Some("chromatic_aberration_pass"),
+            label: Some("god_rays_pass"),
             color_attachments: &[Some(RenderPassColorAttachment {
                 view: post_process.destination,
                 resolve_target: None,
@@ -150,39 +166,39 @@ impl ViewNode for ChromaticAberrationNode {
     }
 }
 
-/// Pipeline resource for chromatic aberration
+/// Pipeline resource for god rays
 #[derive(Resource)]
-pub struct ChromaticAberrationPipeline {
+pub struct GodRaysPipeline {
     pub layout: BindGroupLayout,
     pub sampler: Sampler,
     pub pipeline_id: CachedRenderPipelineId,
 }
 
-impl FromWorld for ChromaticAberrationPipeline {
+impl FromWorld for GodRaysPipeline {
     fn from_world(world: &mut World) -> Self {
         let render_device = world.resource::<RenderDevice>();
 
         let layout = render_device.create_bind_group_layout(
-            "chromatic_aberration_bind_group_layout",
+            "god_rays_bind_group_layout",
             &BindGroupLayoutEntries::sequential(
                 ShaderStages::FRAGMENT,
                 (
                     texture_2d(TextureSampleType::Float { filterable: true }),
                     sampler(SamplerBindingType::Filtering),
-                    uniform_buffer::<ChromaticAberrationSettings>(true),
+                    uniform_buffer::<GodRaysSettings>(true),
                 ),
             ),
         );
 
         let sampler = render_device.create_sampler(&SamplerDescriptor::default());
 
-        let shader = world.load_asset("shaders/chromatic_aberration.wgsl");
+        let shader = world.load_asset("shaders/god_rays.wgsl");
 
         let pipeline_id =
             world
                 .resource_mut::<PipelineCache>()
                 .queue_render_pipeline(RenderPipelineDescriptor {
-                    label: Some("chromatic_aberration_pipeline".into()),
+                    label: Some("god_rays_pipeline".into()),
                     layout: vec![layout.clone()],
                     vertex: fullscreen_shader_vertex_state(),
                     fragment: Some(FragmentState {
