@@ -4,8 +4,13 @@
 
 use bevy::prelude::*;
 
+use super::easing::smooth_step;
+
 /// The total duration of the LIGHTWATCH experience
 pub const EXPERIENCE_DURATION: f32 = 143.0;
+
+/// Duration of transition buffer at phase boundaries (seconds)
+pub const PHASE_TRANSITION_BUFFER: f32 = 0.5;
 
 /// Experience timeline phases
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
@@ -83,6 +88,40 @@ impl Phase {
             Phase::Acceptance => "acceptance",
             Phase::Ended => "ended",
         }
+    }
+
+    /// Get smooth entry factor (0.0 at start, 1.0 after buffer)
+    /// Use this to smoothly ramp up effects at phase start
+    pub fn entry_factor(&self, elapsed: f32) -> f32 {
+        let time_in_phase = elapsed - self.start_time();
+        if time_in_phase < 0.0 {
+            return 0.0;
+        }
+        let factor = (time_in_phase / PHASE_TRANSITION_BUFFER).clamp(0.0, 1.0);
+        smooth_step(factor)
+    }
+
+    /// Get smooth exit factor (1.0 at start, 0.0 at end after buffer)
+    /// Use this to smoothly ramp down effects before phase end
+    pub fn exit_factor(&self, elapsed: f32) -> f32 {
+        let time_until_end = self.end_time() - elapsed;
+        if time_until_end < 0.0 {
+            return 0.0;
+        }
+        let factor = (time_until_end / PHASE_TRANSITION_BUFFER).clamp(0.0, 1.0);
+        smooth_step(factor)
+    }
+
+    /// Check if we're in the entry buffer zone
+    pub fn is_entering(&self, elapsed: f32) -> bool {
+        let time_in_phase = elapsed - self.start_time();
+        time_in_phase >= 0.0 && time_in_phase < PHASE_TRANSITION_BUFFER
+    }
+
+    /// Check if we're in the exit buffer zone
+    pub fn is_exiting(&self, elapsed: f32) -> bool {
+        let time_until_end = self.end_time() - elapsed;
+        time_until_end >= 0.0 && time_until_end < PHASE_TRANSITION_BUFFER
     }
 }
 
@@ -188,6 +227,31 @@ impl ExperienceClock {
     /// Get previous phase (for transition detection)
     pub fn previous_phase(&self) -> Phase {
         self.previous_phase
+    }
+
+    /// Get smooth entry factor for current phase (0.0 at start, 1.0 after buffer)
+    pub fn phase_entry_factor(&self) -> f32 {
+        self.current_phase.entry_factor(self.elapsed)
+    }
+
+    /// Get smooth exit factor for current phase (1.0 normally, 0.0 at end)
+    pub fn phase_exit_factor(&self) -> f32 {
+        self.current_phase.exit_factor(self.elapsed)
+    }
+
+    /// Are we in the entry transition zone?
+    pub fn is_entering_phase(&self) -> bool {
+        self.current_phase.is_entering(self.elapsed)
+    }
+
+    /// Are we in the exit transition zone?
+    pub fn is_exiting_phase(&self) -> bool {
+        self.current_phase.is_exiting(self.elapsed)
+    }
+
+    /// Are we in any transition zone?
+    pub fn is_transitioning(&self) -> bool {
+        self.is_entering_phase() || self.is_exiting_phase()
     }
 
     /// Set time scale (dev only)
