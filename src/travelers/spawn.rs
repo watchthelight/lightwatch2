@@ -4,7 +4,10 @@
 
 use bevy::prelude::*;
 
-use super::{Traveler, TravelerDef, TravelerGrief, TravelerPulse, TravelerState, TravelerVisibility};
+use super::{
+    Traveler, TravelerDef, TravelerGlowMaterial, TravelerGrief, TravelerMeshCache, TravelerPulse,
+    TravelerState, TravelerVisibility,
+};
 use crate::core::{TravelerId, TravelerSpawnedEvent};
 use crate::wide_event;
 
@@ -59,6 +62,65 @@ pub fn handle_traveler_spawns(
             .with_str("id", event.id.name())
             .with_str("name", event.id.display_name())
             .emit(clock.elapsed());
+    }
+}
+
+/// Marker component indicating visuals have been spawned
+#[derive(Component)]
+pub struct TravelerVisualsSpawned;
+
+/// Spawn visual meshes for travelers that need them
+pub fn spawn_traveler_visuals(
+    mut commands: Commands,
+    travelers: Query<(Entity, &Traveler), Without<TravelerVisualsSpawned>>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut mesh_cache: ResMut<TravelerMeshCache>,
+    mut glow_materials: ResMut<Assets<TravelerGlowMaterial>>,
+) {
+    for (entity, traveler) in travelers.iter() {
+        let def = TravelerDef::get(traveler.id);
+
+        // Get or create mesh for this geometry type
+        let (core_mesh, _shell_mesh, _edge_mesh) = mesh_cache.get_or_create(def.geometry, &mut meshes);
+
+        // Create glow material with traveler's color
+        let base_srgba = def.color.base.to_srgba();
+        let glow_material = glow_materials.add(TravelerGlowMaterial {
+            base_color: LinearRgba::new(base_srgba.red, base_srgba.green, base_srgba.blue, 1.0),
+            emissive: LinearRgba::new(
+                base_srgba.red * 2.0,
+                base_srgba.green * 2.0,
+                base_srgba.blue * 2.0,
+                1.0,
+            ),
+            pulse_intensity: 0.3,
+            pulse_phase: traveler.id as u8 as f32 * 0.7, // Different phase per traveler
+            time: 0.0,
+            fresnel_power: 3.0,
+            inner_glow_strength: 0.5,
+            rim_color: LinearRgba::new(1.0, 0.95, 0.9, 1.0),
+            grief_amount: 0.0,
+            _padding: Vec3::ZERO,
+        });
+
+        // Spawn visual mesh as child
+        commands.entity(entity).with_children(|parent| {
+            parent.spawn(MaterialMeshBundle {
+                mesh: core_mesh,
+                material: glow_material,
+                transform: Transform::from_scale(Vec3::splat(0.5)), // Traveler size
+                ..default()
+            });
+        });
+
+        // Mark as having visuals
+        commands.entity(entity).insert(TravelerVisualsSpawned);
+
+        info!(
+            target: "lightwatch::travelers",
+            "Spawned visual mesh for {:?} with glow shader",
+            traveler.id
+        );
     }
 }
 
