@@ -14,12 +14,14 @@ mod bloom;
 mod chromatic_node;
 mod config;
 mod dynamic;
+mod film_grain_node;
 mod materials;
 mod vignette_node;
 
 pub use chromatic_node::{ChromaticAberrationPlugin, ChromaticAberrationSettings};
 pub use config::*;
 pub use dynamic::DynamicPostProcess;
+pub use film_grain_node::{FilmGrainPlugin, FilmGrainSettings};
 pub use materials::*;
 pub use vignette_node::{VignettePlugin, VignetteSettings};
 
@@ -34,7 +36,7 @@ impl Plugin for PostPlugin {
         app.init_resource::<PostProcessConfig>()
             .init_resource::<DynamicPostProcess>()
             // Render graph post-processing nodes
-            .add_plugins((ChromaticAberrationPlugin, VignettePlugin))
+            .add_plugins((ChromaticAberrationPlugin, VignettePlugin, FilmGrainPlugin))
             // Register custom material types (for future render integration)
             .add_plugins((
                 Material2dPlugin::<ChromaticAberrationMaterial>::default(),
@@ -50,6 +52,7 @@ impl Plugin for PostPlugin {
                     dynamic::update_vignette,
                     sync_chromatic_settings,
                     sync_vignette_settings,
+                    sync_film_grain_settings,
                 ),
             );
 
@@ -74,5 +77,18 @@ fn sync_vignette_settings(
 ) {
     for mut settings in cameras.iter_mut() {
         settings.intensity = dynamic.vignette_intensity;
+    }
+}
+
+/// Sync FilmGrainSettings component with DynamicPostProcess state
+fn sync_film_grain_settings(
+    dynamic: Res<DynamicPostProcess>,
+    time: Res<Time>,
+    mut cameras: Query<&mut FilmGrainSettings>,
+) {
+    for mut settings in cameras.iter_mut() {
+        settings.intensity = dynamic.grain_intensity;
+        // Animate the grain by updating time
+        settings.time = time.elapsed_seconds();
     }
 }

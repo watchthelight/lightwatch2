@@ -1,11 +1,11 @@
-//! Vignette render node
+//! Film grain render node
 //!
-//! Implements a render graph node for vignette post-processing.
-//! Darkens screen edges for cinematic focus.
+//! Implements a render graph node for film grain post-processing.
+//! Adds animated noise for cinematic texture and organic feel.
 
 use bevy::{
     core_pipeline::{
-        core_3d::graph::Core3d,
+        core_3d::graph::{Core3d, Node3d},
         fullscreen_vertex_shader::fullscreen_shader_vertex_state,
     },
     ecs::query::QueryItem,
@@ -33,40 +33,43 @@ use bevy::{
     },
 };
 
-use super::chromatic_node::ChromaticAberrationLabel;
+use super::vignette_node::VignetteLabel;
 
-/// Label for the vignette node in the render graph
+/// Label for the film grain node in the render graph
 #[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
-pub struct VignetteLabel;
+pub struct FilmGrainLabel;
 
-/// Component that controls vignette settings per camera
+/// Component that controls film grain settings per camera
 #[derive(Component, Default, Clone, Copy, ExtractComponent, ShaderType)]
-pub struct VignetteSettings {
+pub struct FilmGrainSettings {
+    /// Grain intensity (0.0 = none, higher = more visible grain)
     pub intensity: f32,
-    pub midpoint: f32,
-    pub softness: f32,
+    /// Time value for animated noise
+    pub time: f32,
+    /// Response to luminance (0.0 = uniform, 1.0 = less grain in bright areas)
+    pub response: f32,
     pub _padding: f32,
 }
 
-impl VignetteSettings {
+impl FilmGrainSettings {
     pub fn new(intensity: f32) -> Self {
         Self {
             intensity,
-            midpoint: 0.4,
-            softness: 0.3,
+            time: 0.0,
+            response: 0.5, // Default: reduce grain in bright areas
             _padding: 0.0,
         }
     }
 }
 
-/// Plugin that sets up vignette post-processing
-pub struct VignettePlugin;
+/// Plugin that sets up film grain post-processing
+pub struct FilmGrainPlugin;
 
-impl Plugin for VignettePlugin {
+impl Plugin for FilmGrainPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
-            ExtractComponentPlugin::<VignetteSettings>::default(),
-            UniformComponentPlugin::<VignetteSettings>::default(),
+            ExtractComponentPlugin::<FilmGrainSettings>::default(),
+            UniformComponentPlugin::<FilmGrainSettings>::default(),
         ));
 
         let Some(render_app) = app.get_sub_app_mut(RenderApp) else {
@@ -74,10 +77,15 @@ impl Plugin for VignettePlugin {
         };
 
         render_app
-            .add_render_graph_node::<ViewNodeRunner<VignetteNode>>(Core3d, VignetteLabel)
-            // Only add edge from chromatic aberration to vignette
-            // Film grain will add edge from vignette to EndMainPassPostProcessing
-            .add_render_graph_edge(Core3d, ChromaticAberrationLabel, VignetteLabel);
+            .add_render_graph_node::<ViewNodeRunner<FilmGrainNode>>(Core3d, FilmGrainLabel)
+            .add_render_graph_edges(
+                Core3d,
+                (
+                    VignetteLabel,
+                    FilmGrainLabel,
+                    Node3d::EndMainPassPostProcessing,
+                ),
+            );
     }
 
     fn finish(&self, app: &mut App) {
@@ -85,18 +93,18 @@ impl Plugin for VignettePlugin {
             return;
         };
 
-        render_app.init_resource::<VignettePipeline>();
+        render_app.init_resource::<FilmGrainPipeline>();
     }
 }
 
-/// The render node for vignette
+/// The render node for film grain
 #[derive(Default)]
-pub struct VignetteNode;
+pub struct FilmGrainNode;
 
-impl ViewNode for VignetteNode {
+impl ViewNode for FilmGrainNode {
     type ViewQuery = (
         &'static ViewTarget,
-        &'static DynamicUniformIndex<VignetteSettings>,
+        &'static DynamicUniformIndex<FilmGrainSettings>,
     );
 
     fn run(
@@ -106,12 +114,11 @@ impl ViewNode for VignetteNode {
         (view_target, settings_index): QueryItem<Self::ViewQuery>,
         world: &World,
     ) -> Result<(), NodeRunError> {
-        let vignette_pipeline = world.resource::<VignettePipeline>();
+        let grain_pipeline = world.resource::<FilmGrainPipeline>();
         let pipeline_cache = world.resource::<PipelineCache>();
-        let settings_uniforms = world.resource::<ComponentUniforms<VignetteSettings>>();
+        let settings_uniforms = world.resource::<ComponentUniforms<FilmGrainSettings>>();
 
-        let Some(pipeline) = pipeline_cache.get_render_pipeline(vignette_pipeline.pipeline_id)
-        else {
+        let Some(pipeline) = pipeline_cache.get_render_pipeline(grain_pipeline.pipeline_id) else {
             return Ok(());
         };
 
@@ -122,17 +129,17 @@ impl ViewNode for VignetteNode {
         let post_process = view_target.post_process_write();
 
         let bind_group = render_context.render_device().create_bind_group(
-            "vignette_bind_group",
-            &vignette_pipeline.layout,
+            "film_grain_bind_group",
+            &grain_pipeline.layout,
             &BindGroupEntries::sequential((
                 post_process.source,
-                &vignette_pipeline.sampler,
+                &grain_pipeline.sampler,
                 settings_binding.clone(),
             )),
         );
 
         let mut render_pass = render_context.begin_tracked_render_pass(RenderPassDescriptor {
-            label: Some("vignette_pass"),
+            label: Some("film_grain_pass"),
             color_attachments: &[Some(RenderPassColorAttachment {
                 view: post_process.destination,
                 resolve_target: None,
@@ -151,39 +158,39 @@ impl ViewNode for VignetteNode {
     }
 }
 
-/// Pipeline resource for vignette
+/// Pipeline resource for film grain
 #[derive(Resource)]
-pub struct VignettePipeline {
+pub struct FilmGrainPipeline {
     pub layout: BindGroupLayout,
     pub sampler: Sampler,
     pub pipeline_id: CachedRenderPipelineId,
 }
 
-impl FromWorld for VignettePipeline {
+impl FromWorld for FilmGrainPipeline {
     fn from_world(world: &mut World) -> Self {
         let render_device = world.resource::<RenderDevice>();
 
         let layout = render_device.create_bind_group_layout(
-            "vignette_bind_group_layout",
+            "film_grain_bind_group_layout",
             &BindGroupLayoutEntries::sequential(
                 ShaderStages::FRAGMENT,
                 (
                     texture_2d(TextureSampleType::Float { filterable: true }),
                     sampler(SamplerBindingType::Filtering),
-                    uniform_buffer::<VignetteSettings>(true),
+                    uniform_buffer::<FilmGrainSettings>(true),
                 ),
             ),
         );
 
         let sampler = render_device.create_sampler(&SamplerDescriptor::default());
 
-        let shader = world.load_asset("shaders/vignette.wgsl");
+        let shader = world.load_asset("shaders/film_grain.wgsl");
 
         let pipeline_id =
             world
                 .resource_mut::<PipelineCache>()
                 .queue_render_pipeline(RenderPipelineDescriptor {
-                    label: Some("vignette_pipeline".into()),
+                    label: Some("film_grain_pipeline".into()),
                     layout: vec![layout.clone()],
                     vertex: fullscreen_shader_vertex_state(),
                     fragment: Some(FragmentState {
