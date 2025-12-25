@@ -6,7 +6,7 @@ use bevy::core_pipeline::bloom::BloomSettings;
 use bevy::core_pipeline::tonemapping::Tonemapping;
 use bevy::prelude::*;
 
-use crate::post::ChromaticAberrationSettings;
+use crate::post::{ChromaticAberrationSettings, VignetteSettings};
 
 /// Marker component for the main experience camera
 #[derive(Component)]
@@ -78,6 +78,7 @@ pub fn spawn_camera(mut commands: Commands) {
             ..default()
         },
         ChromaticAberrationSettings::new(0.002), // Base intensity, updated dynamically
+        VignetteSettings::new(0.3), // Base vignette intensity
         ExperienceCamera,
         rig,
     ));
