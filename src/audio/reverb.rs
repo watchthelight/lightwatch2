@@ -89,7 +89,6 @@ impl Reverb {
         }
     }
 
-    #[allow(dead_code)]
     pub fn process(&mut self, input: f32) -> f32 {
         // Sum comb filter outputs
         let mut wet: f32 = self.comb_filters.iter_mut().map(|f| f.process(input)).sum();

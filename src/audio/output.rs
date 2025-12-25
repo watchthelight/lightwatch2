@@ -7,6 +7,7 @@ use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 
 use super::bang_sound::BangRumble;
 use super::grief_sound::GriefDissonance;
+use super::reverb::Reverb;
 use super::spatial::SpatialAudioSource;
 use super::transitions::TransitionSound;
 use super::{BiquadFilter, FilterType, Oscillator, Waveform};
@@ -52,6 +53,7 @@ struct AudioState {
     grief: GriefDissonance,
     transitions: TransitionSound,
     ambiance: AmbianceGenerator,
+    reverb: Reverb,
     master_volume: f32,
     sample_rate: f32,
     /// Cached spatial data
@@ -61,11 +63,15 @@ struct AudioState {
 
 impl AudioState {
     fn new(sample_rate: f32) -> Self {
+        let mut reverb = Reverb::new(sample_rate);
+        reverb.mix = 0.25; // 25% wet for cosmic space feel
+
         Self {
             bang_rumble: BangRumble::new(sample_rate),
             grief: GriefDissonance::new(),
             transitions: TransitionSound::new(),
             ambiance: AmbianceGenerator::new(sample_rate),
+            reverb,
             master_volume: 0.7,
             sample_rate,
             cached_pan: 0.0,
@@ -109,6 +115,9 @@ impl AudioState {
 
         // Ambiance
         sample += self.ambiance.sample(self.sample_rate);
+
+        // Apply reverb for cosmic space feel
+        sample = self.reverb.process(sample);
 
         // Master volume and soft clip
         sample *= self.master_volume;
