@@ -5,6 +5,7 @@
 use bevy::prelude::*;
 
 use super::CameraRig;
+use crate::core::easing::smooth_lerp_factor;
 use crate::core::CameraShakeEvent;
 use crate::wide_event;
 
@@ -138,12 +139,19 @@ pub fn update_shake(time: Res<Time>, mut shake: ResMut<CameraShake>) {
 }
 
 /// Apply shake to camera rig
-pub fn apply_shake_to_rig(shake: Res<CameraShake>, mut rigs: Query<&mut CameraRig>) {
+pub fn apply_shake_to_rig(
+    time: Res<Time>,
+    shake: Res<CameraShake>,
+    mut rigs: Query<&mut CameraRig>,
+) {
+    // Frame-rate independent smoothing factor for decay
+    let smooth_factor = smooth_lerp_factor(time.delta_seconds(), 8.0);
+
     if shake.trauma < 0.001 {
         // Clear shake offset when no trauma
         for mut rig in rigs.iter_mut() {
-            rig.shake_offset = rig.shake_offset.lerp(Vec3::ZERO, 0.3);
-            rig.rotation_offset = rig.rotation_offset.slerp(Quat::IDENTITY, 0.3);
+            rig.shake_offset = rig.shake_offset.lerp(Vec3::ZERO, smooth_factor);
+            rig.rotation_offset = rig.rotation_offset.slerp(Quat::IDENTITY, smooth_factor);
         }
         return;
     }
