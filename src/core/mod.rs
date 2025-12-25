@@ -93,6 +93,7 @@ impl Plugin for CorePlugin {
                     update_exposure,
                     update_debug_overlay,
                     toggle_debug_overlay,
+                    toggle_fullscreen, // Available in all builds
                 ),
             );
 
@@ -101,7 +102,6 @@ impl Plugin for CorePlugin {
         app.add_systems(
             Update,
             (
-                toggle_fullscreen,
                 manual_reload_trigger,
                 time_control::handle_time_control,
                 clear_scrub_position.after(update_clock),

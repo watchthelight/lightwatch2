@@ -8,11 +8,10 @@ pub fn configure_window() -> WindowPlugin {
     WindowPlugin {
         primary_window: Some(Window {
             title: "LIGHTWATCH".into(),
-            resolution: WindowResolution::new(1920., 1080.)
-                .with_scale_factor_override(1.0),
+            resolution: WindowResolution::new(1920., 1080.),
             present_mode: PresentMode::AutoVsync,
             mode: WindowMode::Windowed,
-            resizable: false,
+            resizable: true,
             decorations: true,
             transparent: false,
             focused: true,
@@ -33,8 +32,7 @@ pub fn handle_window_close(
     }
 }
 
-/// Toggle fullscreen with F11 (development feature)
-#[cfg(debug_assertions)]
+/// Toggle fullscreen with F11
 pub fn toggle_fullscreen(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut windows: Query<&mut Window>,
