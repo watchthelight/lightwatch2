@@ -37,6 +37,7 @@ impl Plugin for TravelersPlugin {
                 Update,
                 (
                     handle_traveler_spawns,
+                    spawn_traveler_visuals.after(handle_traveler_spawns),
                     update_traveler_visibility,
                     finalize_spawn,
                     handle_traveler_fading,
