@@ -29,6 +29,7 @@ bevy = { version = "0.14", features = [
 
 # Audio
 bevy_kira_audio = "0.20"
+cpal = "0.15"
 
 # Math utilities
 glam = "0.27"
