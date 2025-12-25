@@ -8,6 +8,7 @@ use super::{
     Traveler, TravelerDef, TravelerGlowMaterial, TravelerGrief, TravelerMeshCache, TravelerPulse,
     TravelerShellMaterial, TravelerState, TravelerVisibility,
 };
+use crate::audio::SpatialAudioSource;
 use crate::core::{TravelerId, TravelerSpawnedEvent};
 use crate::wide_event;
 
@@ -19,6 +20,7 @@ pub struct TravelerBundle {
     pub visibility: TravelerVisibility,
     pub pulse: TravelerPulse,
     pub grief: TravelerGrief,
+    pub spatial_audio: SpatialAudioSource,
     pub transform: TransformBundle,
 }
 
@@ -32,6 +34,13 @@ impl TravelerBundle {
             visibility: TravelerVisibility::default(),
             pulse: TravelerPulse::new(def.rhythm.base_hz, def.rhythm.variance),
             grief: TravelerGrief::default(),
+            spatial_audio: SpatialAudioSource {
+                volume: 1.0,
+                previous_position: def.spawn_position,
+                computed_gain: 1.0,
+                computed_pan: 0.0,
+                computed_pitch: 1.0,
+            },
             transform: TransformBundle::from_transform(Transform::from_translation(
                 def.spawn_position,
             )),

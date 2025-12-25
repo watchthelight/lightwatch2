@@ -7,6 +7,7 @@ use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 
 use super::bang_sound::BangRumble;
 use super::grief_sound::GriefDissonance;
+use super::spatial::SpatialAudioSource;
 use super::transitions::TransitionSound;
 use super::{BiquadFilter, FilterType, Oscillator, Waveform};
 use crate::core::Phase;
@@ -19,6 +20,30 @@ pub enum AudioTrigger {
     PhaseTransition(Phase),
 }
 
+/// Spatial data for a single audio source
+#[derive(Clone, Default)]
+pub struct SpatialSourceData {
+    pub gain: f32,
+    pub pan: f32, // -1 left, +1 right
+    pub pitch: f32,
+}
+
+/// Shared spatial mix data between Bevy and audio thread
+#[derive(Default)]
+pub struct SpatialMixData {
+    /// Per-traveler spatial data
+    pub travelers: [SpatialSourceData; 5], // One per TravelerId
+    /// Master spatial influence (weighted average of active travelers)
+    pub master_pan: f32,
+    pub master_gain: f32,
+}
+
+/// Resource for sharing spatial data with audio thread
+#[derive(Resource)]
+pub struct SharedSpatialData {
+    pub data: Arc<Mutex<SpatialMixData>>,
+}
+
 /// Audio state owned by the audio thread
 struct AudioState {
     bang_rumble: BangRumble,
@@ -27,6 +52,9 @@ struct AudioState {
     ambiance: AmbianceGenerator,
     master_volume: f32,
     sample_rate: f32,
+    /// Cached spatial data
+    cached_pan: f32,
+    cached_gain: f32,
 }
 
 impl AudioState {
@@ -38,7 +66,14 @@ impl AudioState {
             ambiance: AmbianceGenerator::new(sample_rate),
             master_volume: 0.7,
             sample_rate,
+            cached_pan: 0.0,
+            cached_gain: 1.0,
         }
+    }
+
+    fn update_spatial(&mut self, spatial_data: &SpatialMixData) {
+        self.cached_pan = spatial_data.master_pan;
+        self.cached_gain = spatial_data.master_gain.max(0.3); // Minimum gain
     }
 
     fn process_triggers(&mut self, triggers: &mut Vec<AudioTrigger>) {
@@ -73,6 +108,23 @@ impl AudioState {
         // Master volume and soft clip
         sample *= self.master_volume;
         soft_clip(sample)
+    }
+
+    /// Generate stereo sample with spatial panning
+    fn generate_stereo_sample(&mut self) -> (f32, f32) {
+        let mono = self.generate_sample();
+
+        // Apply spatial panning
+        // pan: -1.0 = full left, +1.0 = full right
+        // Using constant-power panning for natural sound
+        let pan = self.cached_pan.clamp(-1.0, 1.0);
+        let angle = (pan + 1.0) * std::f32::consts::FRAC_PI_4; // 0 to PI/2
+        let left = mono * angle.cos();
+        let right = mono * angle.sin();
+
+        // Apply spatial gain
+        let gain = self.cached_gain;
+        (left * gain, right * gain)
     }
 }
 
@@ -155,6 +207,9 @@ pub fn init_audio_output(world: &mut World) {
     let trigger_queue = world.resource::<AudioTriggerQueue>();
     let triggers = trigger_queue.triggers.clone();
 
+    let spatial_data = world.resource::<SharedSpatialData>();
+    let spatial = spatial_data.data.clone();
+
     let host = cpal::default_host();
 
     let Some(device) = host.default_output_device() else {
@@ -181,6 +236,9 @@ pub fn init_audio_output(world: &mut World) {
     // Audio state owned by the audio thread
     let state = Arc::new(Mutex::new(AudioState::new(sample_rate)));
 
+    // Counter for periodic spatial updates
+    let mut spatial_update_counter = 0u32;
+
     let stream = device
         .build_output_stream(
             &config.into(),
@@ -197,11 +255,28 @@ pub fn init_audio_output(world: &mut World) {
                     audio_state.process_triggers(&mut queue);
                 }
 
-                // Generate audio
+                // Periodically update spatial data (every ~1024 samples)
+                spatial_update_counter += 1;
+                if spatial_update_counter >= 1024 {
+                    spatial_update_counter = 0;
+                    if let Ok(spatial_data) = spatial.try_lock() {
+                        audio_state.update_spatial(&spatial_data);
+                    }
+                }
+
+                // Generate stereo audio
                 for frame in data.chunks_mut(channels) {
-                    let sample = audio_state.generate_sample();
-                    for channel in frame.iter_mut() {
-                        *channel = sample;
+                    let (left, right) = audio_state.generate_stereo_sample();
+                    if channels >= 2 {
+                        frame[0] = left;
+                        frame[1] = right;
+                        // Fill remaining channels with average
+                        for channel in frame.iter_mut().skip(2) {
+                            *channel = (left + right) * 0.5;
+                        }
+                    } else {
+                        // Mono fallback
+                        frame[0] = (left + right) * 0.5;
                     }
                 }
             },
@@ -216,7 +291,49 @@ pub fn init_audio_output(world: &mut World) {
 
     world.insert_non_send_resource(AudioOutput { stream });
 
-    info!(target: "lightwatch::audio", "Audio output initialized");
+    info!(target: "lightwatch::audio", "Audio output initialized with spatial stereo");
+}
+
+/// System to sync spatial audio data from ECS to audio thread
+pub fn sync_spatial_audio_data(
+    shared: Res<SharedSpatialData>,
+    sources: Query<(&SpatialAudioSource, &crate::travelers::Traveler)>,
+) {
+    let Ok(mut data) = shared.data.try_lock() else {
+        return;
+    };
+
+    let mut total_gain = 0.0;
+    let mut weighted_pan = 0.0;
+    let mut active_count = 0.0;
+
+    for (source, traveler) in sources.iter() {
+        // Store per-traveler spatial data
+        let idx = traveler.id as usize;
+        if idx < data.travelers.len() {
+            data.travelers[idx] = SpatialSourceData {
+                gain: source.computed_gain,
+                pan: source.computed_pan,
+                pitch: source.computed_pitch,
+            };
+        }
+
+        // Accumulate for master spatial
+        if source.computed_gain > 0.01 {
+            total_gain += source.computed_gain;
+            weighted_pan += source.computed_pan * source.computed_gain;
+            active_count += 1.0;
+        }
+    }
+
+    // Calculate master spatial (weighted average)
+    if active_count > 0.0 {
+        data.master_gain = (total_gain / active_count).clamp(0.3, 1.0);
+        data.master_pan = (weighted_pan / total_gain).clamp(-1.0, 1.0);
+    } else {
+        data.master_gain = 1.0;
+        data.master_pan = 0.0;
+    }
 }
 
 /// Audio output plugin
@@ -225,6 +342,10 @@ pub struct AudioOutputPlugin;
 impl Plugin for AudioOutputPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<AudioTriggerQueue>()
-            .add_systems(Startup, init_audio_output);
+            .insert_resource(SharedSpatialData {
+                data: Arc::new(Mutex::new(SpatialMixData::default())),
+            })
+            .add_systems(Startup, init_audio_output)
+            .add_systems(Update, sync_spatial_audio_data);
     }
 }

@@ -27,7 +27,7 @@ pub use filter::{BiquadFilter, FilterType};
 pub use leitmotif_player::LeitmotifPlugin;
 pub use oscillator::{Oscillator, Waveform};
 pub use output::AudioOutputPlugin;
-pub use spatial::SpatialAudioPlugin;
+pub use spatial::{SpatialAudioPlugin, SpatialAudioSource};
 pub use voice::Voice;
 
 use bevy::prelude::*;
