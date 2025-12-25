@@ -27,7 +27,6 @@ use bevy::{
             ShaderType, TextureFormat, TextureSampleType,
         },
         renderer::{RenderContext, RenderDevice},
-        texture::BevyDefault,
         view::ViewTarget,
         RenderApp,
     },
@@ -88,17 +87,19 @@ impl Plugin for GodRaysRenderPlugin {
         };
 
         render_app
-            .add_render_graph_node::<ViewNodeRunner<GodRaysNode>>(Core3d, GodRaysLabel)
-            // Insert between chromatic aberration and vignette
-            // CA → GodRays → Vignette → FilmGrain → End
-            .add_render_graph_edge(Core3d, ChromaticAberrationLabel, GodRaysLabel)
-            .add_render_graph_edge(Core3d, GodRaysLabel, VignetteLabel);
+            .add_render_graph_node::<ViewNodeRunner<GodRaysNode>>(Core3d, GodRaysLabel);
     }
 
     fn finish(&self, app: &mut App) {
         let Some(render_app) = app.get_sub_app_mut(RenderApp) else {
             return;
         };
+
+        // Add edges in finish() after all nodes are registered
+        // CA → GodRays → Vignette
+        render_app
+            .add_render_graph_edge(Core3d, ChromaticAberrationLabel, GodRaysLabel)
+            .add_render_graph_edge(Core3d, GodRaysLabel, VignetteLabel);
 
         render_app.init_resource::<GodRaysPipeline>();
     }
@@ -206,7 +207,7 @@ impl FromWorld for GodRaysPipeline {
                         shader_defs: vec![],
                         entry_point: "fragment".into(),
                         targets: vec![Some(ColorTargetState {
-                            format: TextureFormat::bevy_default(),
+                            format: TextureFormat::Rgba16Float,
                             blend: None,
                             write_mask: ColorWrites::ALL,
                         })],
