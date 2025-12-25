@@ -18,6 +18,8 @@ pub enum AudioTrigger {
     BangRumble,
     GriefDissonance,
     PhaseTransition(Phase),
+    /// Start fading ambiance to silence
+    FadeAmbiance { duration: f32 },
 }
 
 /// Spatial data for a single audio source
@@ -88,6 +90,9 @@ impl AudioState {
                 AudioTrigger::PhaseTransition(phase) => {
                     self.transitions.trigger_for_phase(phase);
                 }
+                AudioTrigger::FadeAmbiance { duration } => {
+                    self.ambiance.start_fade(duration);
+                }
             }
         }
     }
@@ -128,7 +133,7 @@ impl AudioState {
     }
 }
 
-/// Simplified ambiance generator for the audio thread
+/// Cosmic ambiance generator for the audio thread
 struct AmbianceGenerator {
     rumble: Oscillator,
     shimmer: Oscillator,
@@ -137,6 +142,8 @@ struct AmbianceGenerator {
     shimmer_filter: BiquadFilter,
     noise_filter: BiquadFilter,
     volume: f32,
+    target_volume: f32,
+    fade_speed: f32,
     active: bool,
 }
 
@@ -150,13 +157,36 @@ impl AmbianceGenerator {
             shimmer_filter: BiquadFilter::new(FilterType::HighPass, 2000.0, 2.0, sample_rate),
             noise_filter: BiquadFilter::new(FilterType::BandPass, 400.0, 0.5, sample_rate),
             volume: 0.15,
+            target_volume: 0.15,
+            fade_speed: 0.0,
             active: true,
+        }
+    }
+
+    fn start_fade(&mut self, duration: f32) {
+        self.target_volume = 0.0;
+        if duration > 0.0 {
+            self.fade_speed = self.volume / duration;
+        } else {
+            self.fade_speed = 1.0;
         }
     }
 
     fn sample(&mut self, sample_rate: f32) -> f32 {
         if !self.active {
             return 0.0;
+        }
+
+        // Handle fading
+        if self.fade_speed > 0.0 {
+            let dt = 1.0 / sample_rate;
+            self.volume -= self.fade_speed * dt;
+            if self.volume <= 0.0 {
+                self.volume = 0.0;
+                self.fade_speed = 0.0;
+                self.active = false;
+                return 0.0;
+            }
         }
 
         let rumble = self.rumble.sample(sample_rate);

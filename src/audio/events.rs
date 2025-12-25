@@ -79,6 +79,26 @@ pub fn update_silence(time: Res<Time>, mut silence: ResMut<SilenceManager>) {
     silence.update(dt);
 }
 
+/// Track if ambiance fade has been triggered
+#[derive(Resource, Default)]
+pub struct AmbianceFadeState {
+    pub triggered: bool,
+}
+
+/// Fade ambiance at experience end (139s+)
+pub fn fade_ambiance_at_end(
+    clock: Res<crate::core::ExperienceClock>,
+    trigger_queue: Res<AudioTriggerQueue>,
+    mut fade_state: ResMut<AmbianceFadeState>,
+) {
+    // Fade starts at 139s (Ended phase), takes 4 seconds
+    if !fade_state.triggered && clock.elapsed() >= 139.0 {
+        trigger_queue.send(AudioTrigger::FadeAmbiance { duration: 4.0 });
+        fade_state.triggered = true;
+        info!(target: "lightwatch::audio", "Ambiance fade started");
+    }
+}
+
 /// Event sound plugin
 pub struct EventSoundPlugin;
 
@@ -86,6 +106,7 @@ impl Plugin for EventSoundPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<EventSoundConfig>()
             .init_resource::<SilenceManager>()
+            .init_resource::<AmbianceFadeState>()
             .add_systems(
                 Update,
                 (
@@ -93,6 +114,7 @@ impl Plugin for EventSoundPlugin {
                     handle_traveler_faded,
                     handle_phase_transitions,
                     update_silence,
+                    fade_ambiance_at_end,
                 ),
             );
     }
