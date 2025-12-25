@@ -52,6 +52,7 @@ impl Plugin for CameraPlugin {
                     update_dof_for_phase,
                     handle_focus_events,
                     interpolate_focus,
+                    sync_dof_to_camera.after(interpolate_focus),
                     // Shake systems
                     handle_shake_events,
                     update_shake,

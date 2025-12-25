@@ -3,6 +3,8 @@
 #![allow(dead_code)]
 
 use bevy::core_pipeline::bloom::BloomSettings;
+use bevy::core_pipeline::dof::{DepthOfFieldMode, DepthOfFieldSettings};
+use bevy::core_pipeline::prepass::DepthPrepass;
 use bevy::core_pipeline::tonemapping::Tonemapping;
 use bevy::prelude::*;
 
@@ -77,6 +79,16 @@ pub fn spawn_camera(mut commands: Commands) {
             composite_mode: bevy::core_pipeline::bloom::BloomCompositeMode::Additive,
             ..default()
         },
+        // Depth of field - Gaussian for performance, updated dynamically
+        DepthOfFieldSettings {
+            mode: DepthOfFieldMode::Gaussian,
+            focal_distance: 15.0, // Updated per-phase
+            sensor_height: 0.01866, // Super 35 format
+            aperture_f_stops: 2.8,
+            max_circle_of_confusion_diameter: 8.0,
+            max_depth: 1000.0,
+        },
+        DepthPrepass, // Required for DOF
         ChromaticAberrationSettings::new(0.002), // Base intensity, updated dynamically
         GodRaysSettings::default(), // Updated from bang::GodRayState
         VignetteSettings::new(0.3), // Base vignette intensity

@@ -2,8 +2,10 @@
 
 #![allow(dead_code)]
 
+use bevy::core_pipeline::dof::DepthOfFieldSettings as BevyDofSettings;
 use bevy::prelude::*;
 
+use super::ExperienceCamera;
 use crate::core::{CameraFocusEvent, ExperienceClock, Phase};
 
 /// Depth of field configuration
@@ -123,5 +125,21 @@ impl From<&DepthOfFieldSettings> for DofSettingsUniform {
             enabled: if settings.enabled { 1.0 } else { 0.0 },
             _padding: [0.0; 2],
         }
+    }
+}
+
+/// Sync our DOF resource to Bevy's DOF component on the camera
+pub fn sync_dof_to_camera(
+    settings: Res<DepthOfFieldSettings>,
+    mut cameras: Query<&mut BevyDofSettings, With<ExperienceCamera>>,
+) {
+    if !settings.enabled {
+        return;
+    }
+
+    for mut dof in cameras.iter_mut() {
+        dof.focal_distance = settings.focus_distance;
+        dof.aperture_f_stops = settings.aperture;
+        dof.max_circle_of_confusion_diameter = settings.max_blur;
     }
 }
