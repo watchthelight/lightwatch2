@@ -85,11 +85,18 @@ impl Transmission {
 
     /// Get currently visible text
     pub fn visible_text(&self) -> &str {
-        &self.full_text[..self.revealed_chars.min(self.full_text.len())]
+        // Find byte position of the nth character (UTF-8 safe)
+        let byte_pos = self
+            .full_text
+            .char_indices()
+            .nth(self.revealed_chars)
+            .map(|(i, _)| i)
+            .unwrap_or(self.full_text.len());
+        &self.full_text[..byte_pos]
     }
 
     /// Check if typing is complete
     pub fn typing_complete(&self) -> bool {
-        self.revealed_chars >= self.full_text.len()
+        self.revealed_chars >= self.full_text.chars().count()
     }
 }
