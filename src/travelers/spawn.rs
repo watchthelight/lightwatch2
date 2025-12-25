@@ -21,7 +21,7 @@ pub struct TravelerBundle {
     pub pulse: TravelerPulse,
     pub grief: TravelerGrief,
     pub spatial_audio: SpatialAudioSource,
-    pub transform: TransformBundle,
+    pub spatial: SpatialBundle,
 }
 
 impl TravelerBundle {
@@ -41,7 +41,7 @@ impl TravelerBundle {
                 computed_pan: 0.0,
                 computed_pitch: 1.0,
             },
-            transform: TransformBundle::from_transform(Transform::from_translation(
+            spatial: SpatialBundle::from_transform(Transform::from_translation(
                 def.spawn_position,
             )),
         }
