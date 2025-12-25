@@ -151,36 +151,36 @@ impl TransitionPresets {
         }
     }
 
-    /// Discovery: approaching the travelers
+    /// Discovery: approaching the travelers (12s of 30s phase)
     pub fn discovery_approach() -> CameraTransition {
         CameraTransition {
             from_position: Vec3::new(2.0, 0.5, 14.0),
             to_position: Vec3::new(0.0, 0.0, 10.0),
-            duration: 20.0,
-            easing: EasingFunction::EaseInOutQuart,
+            duration: 12.0,
+            easing: EasingFunction::EaseInOutCubic,
             look_at: Some(Vec3::ZERO),
             ..default()
         }
     }
 
-    /// Connection: settle in close
+    /// Connection: settle in close (8s of 30s phase)
     pub fn connection_settle() -> CameraTransition {
         CameraTransition {
             from_position: Vec3::new(0.0, 0.0, 10.0),
             to_position: Vec3::new(0.0, -0.5, 8.0),
-            duration: 10.0,
-            easing: EasingFunction::EaseOutExpo,
+            duration: 8.0,
+            easing: EasingFunction::EaseInOutCubic,
             look_at: Some(Vec3::ZERO),
             ..default()
         }
     }
 
-    /// Acceptance: pull back slowly
+    /// Acceptance: pull back slowly (40s of 56s phase)
     pub fn acceptance_pullback() -> CameraTransition {
         CameraTransition {
             from_position: Vec3::new(0.0, -0.5, 8.0),
             to_position: Vec3::new(0.0, 0.0, 40.0),
-            duration: 50.0, // Very slow
+            duration: 40.0,
             easing: EasingFunction::EaseInOutCubic,
             look_at: Some(Vec3::ZERO),
             ..default()
