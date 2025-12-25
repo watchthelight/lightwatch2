@@ -7,7 +7,7 @@ use bevy::prelude::*;
 
 use super::output::{AudioTrigger, AudioTriggerQueue};
 use super::silence::SilenceManager;
-use crate::core::{BangEvent, BangStage, PhaseChangedEvent, TravelerId, TravelerFadedEvent};
+use crate::core::{AudioAction, AudioLayerEvent, BangEvent, BangStage, PhaseChangedEvent, TravelerId, TravelerFadedEvent};
 
 /// Event sound configuration (for reference/future tuning)
 #[derive(Resource)]
@@ -74,6 +74,36 @@ pub fn handle_phase_transitions(
     }
 }
 
+/// Handle audio layer events (start/stop/fade layers)
+pub fn handle_audio_layer_events(
+    mut events: EventReader<AudioLayerEvent>,
+    trigger_queue: Res<AudioTriggerQueue>,
+) {
+    for event in events.read() {
+        match &event.action {
+            AudioAction::Start => {
+                // Layers fade in over 1 second
+                debug!(target: "lightwatch::audio", "Layer '{}' starting with fade-in", event.layer);
+                // Currently no specific layer system - ambiance handles this
+            }
+            AudioAction::Stop => {
+                // Instant stop (should not be used - use FadeOut instead)
+                debug!(target: "lightwatch::audio", "Layer '{}' stopping instantly", event.layer);
+            }
+            AudioAction::FadeIn => {
+                debug!(target: "lightwatch::audio", "Layer '{}' fading in", event.layer);
+            }
+            AudioAction::FadeOut => {
+                // Fade out over 2 seconds
+                if event.layer == "all" || event.layer == "radiation" {
+                    trigger_queue.send(AudioTrigger::FadeAmbiance { duration: 2.0 });
+                    debug!(target: "lightwatch::audio", "Layer '{}' fading out over 2s", event.layer);
+                }
+            }
+        }
+    }
+}
+
 /// Update silence manager
 pub fn update_silence(time: Res<Time>, mut silence: ResMut<SilenceManager>) {
     let dt = time.delta_seconds();
@@ -114,6 +144,7 @@ impl Plugin for EventSoundPlugin {
                     handle_bang_events,
                     handle_traveler_faded,
                     handle_phase_transitions,
+                    handle_audio_layer_events,
                     update_silence,
                     fade_ambiance_at_end,
                 ),
