@@ -27,7 +27,6 @@ use bevy::{
             ShaderType, TextureFormat, TextureSampleType,
         },
         renderer::{RenderContext, RenderDevice},
-        texture::BevyDefault,
         view::ViewTarget,
         RenderApp,
     },
@@ -77,21 +76,24 @@ impl Plugin for FilmGrainPlugin {
         };
 
         render_app
-            .add_render_graph_node::<ViewNodeRunner<FilmGrainNode>>(Core3d, FilmGrainLabel)
-            .add_render_graph_edges(
-                Core3d,
-                (
-                    VignetteLabel,
-                    FilmGrainLabel,
-                    Node3d::EndMainPassPostProcessing,
-                ),
-            );
+            .add_render_graph_node::<ViewNodeRunner<FilmGrainNode>>(Core3d, FilmGrainLabel);
     }
 
     fn finish(&self, app: &mut App) {
         let Some(render_app) = app.get_sub_app_mut(RenderApp) else {
             return;
         };
+
+        // Add edges in finish() after all nodes are registered
+        // Vignette → FilmGrain → End
+        render_app.add_render_graph_edges(
+            Core3d,
+            (
+                VignetteLabel,
+                FilmGrainLabel,
+                Node3d::EndMainPassPostProcessing,
+            ),
+        );
 
         render_app.init_resource::<FilmGrainPipeline>();
     }
@@ -198,7 +200,7 @@ impl FromWorld for FilmGrainPipeline {
                         shader_defs: vec![],
                         entry_point: "fragment".into(),
                         targets: vec![Some(ColorTargetState {
-                            format: TextureFormat::bevy_default(),
+                            format: TextureFormat::Rgba16Float,
                             blend: None,
                             write_mask: ColorWrites::ALL,
                         })],
