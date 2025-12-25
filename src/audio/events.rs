@@ -4,6 +4,7 @@ use bevy::prelude::*;
 
 use super::bang_sound::BangRumble;
 use super::grief_sound::GriefDissonance;
+use super::output::{AudioTrigger, AudioTriggerQueue};
 use super::silence::SilenceManager;
 use super::transitions::TransitionSound;
 use crate::core::{BangEvent, BangStage, PhaseChangedEvent, TravelerId, TravelerFadedEvent};
@@ -49,10 +50,15 @@ pub struct EventSounds {
 }
 
 /// Handle bang events
-pub fn handle_bang_events(mut events: EventReader<BangEvent>, mut sounds: ResMut<EventSounds>) {
+pub fn handle_bang_events(
+    mut events: EventReader<BangEvent>,
+    mut sounds: ResMut<EventSounds>,
+    trigger_queue: Res<AudioTriggerQueue>,
+) {
     for event in events.read() {
         if event.stage == BangStage::Expansion {
             sounds.bang_rumble.trigger();
+            trigger_queue.send(AudioTrigger::BangRumble);
             info!(target: "lightwatch::audio", "Bang rumble triggered");
         }
     }
@@ -62,10 +68,12 @@ pub fn handle_bang_events(mut events: EventReader<BangEvent>, mut sounds: ResMut
 pub fn handle_traveler_faded(
     mut events: EventReader<TravelerFadedEvent>,
     mut sounds: ResMut<EventSounds>,
+    trigger_queue: Res<AudioTriggerQueue>,
 ) {
     for event in events.read() {
         if event.id == TravelerId::Child {
             sounds.grief.trigger();
+            trigger_queue.send(AudioTrigger::GriefDissonance);
             info!(target: "lightwatch::audio", "Grief dissonance triggered for Child");
         }
     }
@@ -75,9 +83,11 @@ pub fn handle_traveler_faded(
 pub fn handle_phase_transitions(
     mut events: EventReader<PhaseChangedEvent>,
     mut sounds: ResMut<EventSounds>,
+    trigger_queue: Res<AudioTriggerQueue>,
 ) {
     for event in events.read() {
         sounds.transitions.trigger_for_phase(event.to);
+        trigger_queue.send(AudioTrigger::PhaseTransition(event.to));
         info!(target: "lightwatch::audio", "Phase transition sound: {:?}", event.to);
     }
 }

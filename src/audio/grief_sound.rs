@@ -51,7 +51,6 @@ impl GriefDissonance {
     }
 
     /// Generate sample
-    #[allow(dead_code)]
     pub fn sample(&mut self, sample_rate: f32, delta_time: f32) -> f32 {
         if !self.active {
             return 0.0;

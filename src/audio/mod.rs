@@ -11,6 +11,7 @@ mod leitmotif;
 mod leitmotif_player;
 mod melody;
 mod oscillator;
+mod output;
 mod reverb;
 mod scale;
 mod silence;
@@ -25,6 +26,7 @@ pub use events::EventSoundPlugin;
 pub use filter::{BiquadFilter, FilterType};
 pub use leitmotif_player::LeitmotifPlugin;
 pub use oscillator::{Oscillator, Waveform};
+pub use output::AudioOutputPlugin;
 pub use spatial::SpatialAudioPlugin;
 pub use voice::Voice;
 
@@ -45,6 +47,7 @@ pub struct AudioPlugin;
 impl Plugin for AudioPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(AudioSynthesisPlugin)
+            .add_plugins(AudioOutputPlugin)
             .add_plugins(LeitmotifPlugin)
             .add_plugins(SpatialAudioPlugin)
             .add_plugins(EventSoundPlugin)
