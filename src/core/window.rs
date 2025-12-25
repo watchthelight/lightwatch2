@@ -9,7 +9,7 @@ pub fn configure_window() -> WindowPlugin {
         primary_window: Some(Window {
             title: "LIGHTWATCH".into(),
             resolution: WindowResolution::new(1920., 1080.),
-            present_mode: PresentMode::AutoVsync,
+            present_mode: PresentMode::Fifo,  // Strict VSync - caps to display refresh rate
             mode: WindowMode::Windowed,
             resizable: true,
             decorations: true,
