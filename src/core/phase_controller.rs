@@ -76,24 +76,24 @@ pub fn create_moment_schedule() -> Vec<Moment> {
         Moment::new(1.0, "age_info", MomentAction::SignalTypewriter("age: 14.3 billion years".into())),
 
         // ====================================================================
-        // BANG PHASE (2-12s)
+        // BANG PHASE (2-12s) - moments staggered by 0.05s to prevent frame spikes
         // ====================================================================
         Moment::new(2.0, "bang_start", MomentAction::BangStage(BangStage::Start)),
-        Moment::new(2.0, "hide_signal", MomentAction::HideText),
+        Moment::new(2.05, "hide_signal", MomentAction::HideText),
         Moment::new(2.5, "light_point", MomentAction::BangStage(BangStage::LightPoint)),
         Moment::new(3.0, "expansion", MomentAction::BangStage(BangStage::Expansion)),
         Moment::new(4.0, "bang_peak", MomentAction::BangStage(BangStage::Peak)),
-        Moment::new(4.0, "peak_glitch", MomentAction::Glitch { intensity: 0.8, duration: 0.2 }),
-        Moment::new(4.0, "peak_shake", MomentAction::CameraShake { intensity: 0.4, duration: 0.5 }),
+        Moment::new(4.05, "peak_glitch", MomentAction::Glitch { intensity: 0.8, duration: 0.2 }),
+        Moment::new(4.10, "peak_shake", MomentAction::CameraShake { intensity: 0.4, duration: 0.5 }),
         Moment::new(6.0, "settling", MomentAction::BangStage(BangStage::Settling)),
         Moment::new(9.5, "bang_complete", MomentAction::BangStage(BangStage::Complete)),
         Moment::new(10.0, "start_radiation", MomentAction::StartLayer("radiation".into())),
 
         // ====================================================================
-        // AWAKENING PHASE (12-27s)
+        // AWAKENING PHASE (12-27s) - staggered moments
         // ====================================================================
-        Moment::new(12.0, "archivist_spawns", MomentAction::SpawnTraveler(TravelerId::Archivist)),
         Moment::new(12.0, "camera_drift", MomentAction::SetCameraBehavior(CameraBehavior::Drift)),
+        Moment::new(12.05, "archivist_spawns", MomentAction::SpawnTraveler(TravelerId::Archivist)),
         Moment::new(15.0, "archivist_text", MomentAction::ShowText {
             text: "we built these for you".into(),
             traveler: Some(TravelerId::Archivist),
@@ -150,8 +150,8 @@ pub fn create_moment_schedule() -> Vec<Moment> {
         Moment::new(87.0, "camera_pullback", MomentAction::SetCameraBehavior(CameraBehavior::Pullback)),
         Moment::new(90.0, "stop_radiation", MomentAction::StopLayer("radiation".into())),
         Moment::new(95.0, "child_fades", MomentAction::FadeTraveler(TravelerId::Child)),
-        Moment::new(95.5, "grief_shake", MomentAction::CameraShake { intensity: 0.2, duration: 1.0 }),
-        Moment::new(96.0, "archivist_grief", MomentAction::TriggerGrief {
+        Moment::new(95.6, "grief_shake", MomentAction::CameraShake { intensity: 0.2, duration: 1.0 }),
+        Moment::new(96.1, "archivist_grief", MomentAction::TriggerGrief {
             mourner: TravelerId::Archivist,
             deceased: TravelerId::Child,
         }),
@@ -355,9 +355,10 @@ fn dispatch_moment_action(
         }
 
         MomentAction::StopLayer(layer) => {
+            // Use FadeOut instead of Stop for smooth crossfades
             audio_events.send(AudioLayerEvent {
                 layer: layer.clone(),
-                action: AudioAction::Stop,
+                action: AudioAction::FadeOut,
                 elapsed,
             });
         }
