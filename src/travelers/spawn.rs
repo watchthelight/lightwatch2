@@ -6,7 +6,7 @@ use bevy::prelude::*;
 
 use super::{
     Traveler, TravelerDef, TravelerGlowMaterial, TravelerGrief, TravelerMeshCache, TravelerPulse,
-    TravelerState, TravelerVisibility,
+    TravelerShellMaterial, TravelerState, TravelerVisibility,
 };
 use crate::core::{TravelerId, TravelerSpawnedEvent};
 use crate::wide_event;
@@ -76,12 +76,13 @@ pub fn spawn_traveler_visuals(
     mut meshes: ResMut<Assets<Mesh>>,
     mut mesh_cache: ResMut<TravelerMeshCache>,
     mut glow_materials: ResMut<Assets<TravelerGlowMaterial>>,
+    mut shell_materials: ResMut<Assets<TravelerShellMaterial>>,
 ) {
     for (entity, traveler) in travelers.iter() {
         let def = TravelerDef::get(traveler.id);
 
-        // Get or create mesh for this geometry type
-        let (core_mesh, _shell_mesh, _edge_mesh) = mesh_cache.get_or_create(def.geometry, &mut meshes);
+        // Get or create meshes for this geometry type
+        let (core_mesh, shell_mesh, _edge_mesh) = mesh_cache.get_or_create(def.geometry, &mut meshes);
 
         // Create glow material with traveler's color
         let base_srgba = def.color.base.to_srgba();
@@ -103,12 +104,32 @@ pub fn spawn_traveler_visuals(
             _padding: Vec3::ZERO,
         });
 
-        // Spawn visual mesh as child
+        // Create shell material for translucent outer layer
+        let shell_material = shell_materials.add(TravelerShellMaterial {
+            base_color: LinearRgba::new(base_srgba.red, base_srgba.green, base_srgba.blue, 0.2),
+            refraction_strength: 0.1,
+            thickness: 0.5,
+            ior: 1.5,
+            pulse_intensity: 0.15,
+            time: 0.0,
+            _padding: Vec3::ZERO,
+        });
+
+        // Spawn visual meshes as children
         commands.entity(entity).with_children(|parent| {
+            // Core mesh with glow material
             parent.spawn(MaterialMeshBundle {
                 mesh: core_mesh,
                 material: glow_material,
                 transform: Transform::from_scale(Vec3::splat(0.5)), // Traveler size
+                ..default()
+            });
+
+            // Shell mesh with translucent material (slightly larger)
+            parent.spawn(MaterialMeshBundle {
+                mesh: shell_mesh,
+                material: shell_material,
+                transform: Transform::from_scale(Vec3::splat(0.55)), // Slightly larger than core
                 ..default()
             });
         });
@@ -118,7 +139,7 @@ pub fn spawn_traveler_visuals(
 
         info!(
             target: "lightwatch::travelers",
-            "Spawned visual mesh for {:?} with glow shader",
+            "Spawned visual meshes for {:?} with glow and shell shaders",
             traveler.id
         );
     }
