@@ -27,9 +27,9 @@ fn spawn_transmission(commands: &mut Commands, config: &TextConfig, transmission
             text: Text::from_section(
                 "", // Start empty
                 TextStyle {
+                    font: config.font.clone(),
                     font_size: config.font_size,
                     color: config.text_color,
-                    ..default()
                 },
             )
             .with_justify(position.to_justify()),

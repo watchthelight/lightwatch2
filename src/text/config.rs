@@ -7,6 +7,8 @@ use bevy::prelude::*;
 /// Text display configuration
 #[derive(Resource)]
 pub struct TextConfig {
+    /// Font handle
+    pub font: Handle<Font>,
     /// Characters per second for typewriter
     pub chars_per_second: f32,
     /// Hold duration after complete
@@ -22,9 +24,11 @@ pub struct TextConfig {
     pub glow_color: Color,
 }
 
-impl Default for TextConfig {
-    fn default() -> Self {
+impl TextConfig {
+    /// Create config with font handle
+    pub fn new(font: Handle<Font>) -> Self {
         Self {
+            font,
             chars_per_second: 12.0,
             hold_duration: 3.0,
             fade_duration: 1.5,
