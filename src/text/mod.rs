@@ -23,13 +23,20 @@ pub use transmission::{Transmission, TransmissionState};
 
 use bevy::prelude::*;
 
+/// Load font and create text config
+fn setup_text_config(mut commands: Commands, asset_server: Res<AssetServer>) {
+    let font = asset_server.load("fonts/JetBrainsMono-Regular.ttf");
+    commands.insert_resource(TextConfig::new(font));
+    info!(target: "lightwatch::text", "Text font loaded");
+}
+
 /// Transmission plugin for text display
 pub struct TransmissionPlugin;
 
 impl Plugin for TransmissionPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<TextConfig>()
-            .init_resource::<TransmissionQueue>()
+        app.init_resource::<TransmissionQueue>()
+            .add_systems(Startup, setup_text_config)
             .add_systems(
                 Update,
                 (
