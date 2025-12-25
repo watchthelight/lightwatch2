@@ -270,7 +270,7 @@ pub fn transform_seeds_to_travelers(
 
         // Mark position for traveler spawn
         commands.spawn((
-            TransformBundle::from_transform(*transform),
+            SpatialBundle::from_transform(*transform),
             TravelerSpawnMarker { id: traveler_id },
             Name::new(format!("Traveler Spawn {:?}", traveler_id)),
         ));
