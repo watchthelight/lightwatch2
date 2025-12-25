@@ -173,33 +173,41 @@ pub fn animate_dust(
 pub fn update_dust_visibility(
     clock: Res<ExperienceClock>,
     config: Res<DustConfig>,
-    mut particles: Query<(&DustParticle, &mut Visibility, &Handle<StandardMaterial>), With<DustMarker>>,
+    dust_assets: Option<Res<DustAssets>>,
+    mut particles: Query<&mut Visibility, With<DustMarker>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
     let phase = clock.phase();
     let progress = clock.phase_progress();
 
+    // Calculate phase-based intensity
     let intensity = match phase {
         Phase::Signal | Phase::Bang => 0.0,
         Phase::Awakening => progress * config.intensity, // Fade in
         Phase::Discovery => config.intensity,
-        Phase::Connection => config.intensity * 0.7,
-        Phase::Acceptance => config.intensity * (1.0 - progress), // Fade out
-        Phase::Ended => 0.0,
+        Phase::Connection => config.intensity * 0.8,
+        Phase::Acceptance => config.intensity * (1.0 - progress * 0.8), // Partial fade
+        Phase::Ended => config.intensity * 0.2, // Dim but visible
     };
 
-    for (dust, mut visibility, material_handle) in particles.iter_mut() {
-        if intensity < 0.01 {
-            *visibility = Visibility::Hidden;
-        } else {
-            *visibility = Visibility::Visible;
+    let visible = intensity > 0.01;
 
-            // Update material opacity
-            if let Some(material) = materials.get_mut(material_handle) {
-                let alpha = dust.opacity * intensity;
-                material.base_color = Color::srgba(0.9, 0.85, 0.8, alpha);
-            }
+    // Update shared material once (all particles use same material)
+    if let Some(assets) = dust_assets {
+        if let Some(material) = materials.get_mut(&assets.material) {
+            let alpha = 0.3 * intensity; // Base alpha is 0.3
+            material.base_color = Color::srgba(0.9, 0.85, 0.8, alpha);
+            material.emissive = LinearRgba::new(0.2 * intensity, 0.18 * intensity, 0.15 * intensity, 1.0);
         }
+    }
+
+    // Update visibility for all particles
+    for mut visibility in particles.iter_mut() {
+        *visibility = if visible {
+            Visibility::Visible
+        } else {
+            Visibility::Hidden
+        };
     }
 }
 
