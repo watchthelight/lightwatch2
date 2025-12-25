@@ -6,6 +6,7 @@ use bevy::prelude::*;
 pub mod build_info;
 pub mod clock;
 pub mod debug_overlay;
+pub mod easing;
 pub mod events;
 pub mod exposure;
 pub mod hot_reload;
