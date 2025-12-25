@@ -6,6 +6,8 @@ use bevy::core_pipeline::bloom::BloomSettings;
 use bevy::core_pipeline::tonemapping::Tonemapping;
 use bevy::prelude::*;
 
+use crate::post::ChromaticAberrationSettings;
+
 /// Marker component for the main experience camera
 #[derive(Component)]
 pub struct ExperienceCamera;
@@ -75,6 +77,7 @@ pub fn spawn_camera(mut commands: Commands) {
             composite_mode: bevy::core_pipeline::bloom::BloomCompositeMode::Additive,
             ..default()
         },
+        ChromaticAberrationSettings::new(0.002), // Base intensity, updated dynamically
         ExperienceCamera,
         rig,
     ));
