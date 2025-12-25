@@ -155,11 +155,12 @@ pub fn apply_approach_behavior(
             let direction = -rig.base_position.normalize();
             let movement = direction * params.approach_speed * time.delta_seconds();
 
-            // Only apply when approaching
+            // Calculate blend: fade in when current, fade out when previous
             let blend = if state.current == CameraBehavior::Approach {
                 ease_in_out_cubic(state.transition)
             } else {
-                0.0
+                // Fading out from approach
+                1.0 - ease_in_out_cubic(state.transition)
             };
 
             rig.base_position += movement * blend;
@@ -192,11 +193,12 @@ pub fn apply_pullback_behavior(
             let direction = rig.base_position.normalize();
             let movement = direction * params.pullback_speed * time.delta_seconds();
 
-            // Only apply when pulling back
+            // Calculate blend: fade in when current, fade out when previous
             let blend = if state.current == CameraBehavior::Pullback {
                 ease_in_out_cubic(state.transition)
             } else {
-                0.0
+                // Fading out from pullback
+                1.0 - ease_in_out_cubic(state.transition)
             };
 
             rig.base_position += movement * blend;
