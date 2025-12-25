@@ -1,8 +1,46 @@
-//! Bang core light - Central explosion point
+//! Bang core light - Central explosion point with custom shader
 
 use bevy::prelude::*;
+use bevy::render::render_resource::{AsBindGroup, ShaderRef};
 
 use crate::core::ExperienceClock;
+
+/// Custom bang core material
+#[derive(Asset, TypePath, AsBindGroup, Debug, Clone)]
+pub struct BangCoreMaterial {
+    #[uniform(0)]
+    pub time: f32,
+    #[uniform(0)]
+    pub intensity: f32,
+    #[uniform(0)]
+    pub temperature: f32,
+    #[uniform(0)]
+    pub expansion: f32,
+    #[uniform(0)]
+    pub color: LinearRgba,
+}
+
+impl Default for BangCoreMaterial {
+    fn default() -> Self {
+        Self {
+            time: 0.0,
+            intensity: 0.0,
+            temperature: 1.0,
+            expansion: 0.0,
+            color: LinearRgba::WHITE,
+        }
+    }
+}
+
+impl Material for BangCoreMaterial {
+    fn fragment_shader() -> ShaderRef {
+        "shaders/bang_core.wgsl".into()
+    }
+
+    fn alpha_mode(&self) -> AlphaMode {
+        AlphaMode::Add // Additive blending for glow effect
+    }
+}
 
 /// Bang core light state
 #[derive(Component, Debug)]
@@ -49,25 +87,19 @@ impl Default for BangConfig {
     }
 }
 
-/// Spawn bang core geometry
+/// Spawn bang core geometry with custom material
 pub fn spawn_bang_core(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
+    mut materials: ResMut<Assets<BangCoreMaterial>>,
 ) {
-    // Core sphere
+    // Core sphere - icosphere for smooth surface
     let mesh = meshes.add(Sphere::new(0.1).mesh().ico(3).unwrap());
 
-    let material = materials.add(StandardMaterial {
-        base_color: Color::WHITE,
-        emissive: LinearRgba::new(0.0, 0.0, 0.0, 1.0), // Start dark
-        unlit: true,
-        alpha_mode: AlphaMode::Add,
-        ..default()
-    });
+    let material = materials.add(BangCoreMaterial::default());
 
     commands.spawn((
-        PbrBundle {
+        MaterialMeshBundle {
             mesh,
             material,
             transform: Transform::from_scale(Vec3::ZERO), // Start invisible
@@ -78,22 +110,24 @@ pub fn spawn_bang_core(
         Name::new("Bang Core"),
     ));
 
-    info!(target: "lightwatch::bang", "Spawned bang core");
+    info!(target: "lightwatch::bang", "Spawned bang core with custom shader");
 }
 
 /// Update bang core based on timeline
 pub fn update_bang_core(
     clock: Res<ExperienceClock>,
     config: Res<BangConfig>,
+    time: Res<Time>,
     mut cores: Query<(
         &mut BangCore,
         &mut Transform,
         &mut Visibility,
-        &Handle<StandardMaterial>,
+        &Handle<BangCoreMaterial>,
     )>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
+    mut materials: ResMut<Assets<BangCoreMaterial>>,
 ) {
     let elapsed = clock.elapsed();
+    let current_time = time.elapsed_seconds();
 
     for (mut core, mut transform, mut visibility, material_handle) in cores.iter_mut() {
         // Before start
@@ -150,17 +184,14 @@ pub fn update_bang_core(
         let scale = 0.1 + core.expansion * 50.0;
         transform.scale = Vec3::splat(scale);
 
-        // Apply to material
+        // Sync to custom material
         if let Some(material) = materials.get_mut(material_handle) {
-            let color = temperature_to_color(core.temperature);
-            material.emissive = LinearRgba::new(
-                color.x * core.intensity * 2.0,
-                color.y * core.intensity * 2.0,
-                color.z * core.intensity * 2.0,
-                1.0,
-            );
-            material.base_color =
-                Color::srgba(color.x, color.y, color.z, core.intensity.min(1.0));
+            material.time = current_time;
+            material.intensity = core.intensity;
+            material.temperature = core.temperature;
+            material.expansion = core.expansion;
+            // Color is computed in shader based on temperature
+            material.color = LinearRgba::new(1.0, 1.0, 1.0, core.intensity.min(1.0));
         }
     }
 }
@@ -174,28 +205,13 @@ fn ease_out_expo(t: f32) -> f32 {
     }
 }
 
-/// Convert temperature (0-1) to color
-fn temperature_to_color(temp: f32) -> Vec3 {
-    // White -> Amber -> Red
-    let white = Vec3::new(1.0, 0.98, 0.95);
-    let amber = Vec3::new(0.91, 0.64, 0.27);
-    let red = Vec3::new(0.7, 0.2, 0.1);
-
-    if temp > 0.5 {
-        let t = (temp - 0.5) * 2.0;
-        white.lerp(amber, 1.0 - t)
-    } else {
-        let t = temp * 2.0;
-        amber.lerp(red, 1.0 - t)
-    }
-}
-
 /// Bang core plugin
 pub struct BangCorePlugin;
 
 impl Plugin for BangCorePlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<BangConfig>()
+        app.add_plugins(MaterialPlugin::<BangCoreMaterial>::default())
+            .init_resource::<BangConfig>()
             .add_systems(Startup, spawn_bang_core)
             .add_systems(Update, update_bang_core);
     }
