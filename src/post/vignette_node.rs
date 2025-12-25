@@ -27,13 +27,10 @@ use bevy::{
             ShaderType, TextureFormat, TextureSampleType,
         },
         renderer::{RenderContext, RenderDevice},
-        texture::BevyDefault,
         view::ViewTarget,
         RenderApp,
     },
 };
-
-use super::chromatic_node::ChromaticAberrationLabel;
 
 /// Label for the vignette node in the render graph
 #[derive(Debug, Hash, PartialEq, Eq, Clone, RenderLabel)]
@@ -73,11 +70,10 @@ impl Plugin for VignettePlugin {
             return;
         };
 
+        // Just add the node - edges are handled by god_rays_node (CA → GodRays → Vignette)
+        // and film_grain_node (Vignette → FilmGrain → End)
         render_app
-            .add_render_graph_node::<ViewNodeRunner<VignetteNode>>(Core3d, VignetteLabel)
-            // Only add edge from chromatic aberration to vignette
-            // Film grain will add edge from vignette to EndMainPassPostProcessing
-            .add_render_graph_edge(Core3d, ChromaticAberrationLabel, VignetteLabel);
+            .add_render_graph_node::<ViewNodeRunner<VignetteNode>>(Core3d, VignetteLabel);
     }
 
     fn finish(&self, app: &mut App) {
@@ -191,7 +187,7 @@ impl FromWorld for VignettePipeline {
                         shader_defs: vec![],
                         entry_point: "fragment".into(),
                         targets: vec![Some(ColorTargetState {
-                            format: TextureFormat::bevy_default(),
+                            format: TextureFormat::Rgba16Float,
                             blend: None,
                             write_mask: ColorWrites::ALL,
                         })],
