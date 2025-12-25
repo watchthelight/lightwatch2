@@ -82,7 +82,7 @@ impl WideEvent {
             .collect::<Vec<_>>()
             .join(" ");
 
-        info!(
+        debug!(
             target: "lightwatch::events",
             "[{:.2}s] {} {}",
             self.elapsed_secs,

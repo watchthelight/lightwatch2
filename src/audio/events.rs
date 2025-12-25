@@ -11,6 +11,7 @@ use crate::core::{BangEvent, BangStage, PhaseChangedEvent, TravelerId, TravelerF
 
 /// Event sound configuration (for reference/future tuning)
 #[derive(Resource)]
+#[allow(dead_code)]
 pub struct EventSoundConfig {
     /// Bang rumble duration
     pub bang_duration: f32,

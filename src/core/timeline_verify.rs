@@ -47,7 +47,7 @@ pub fn verify_timeline(
                 phase, elapsed, expected, delta
             );
         } else {
-            info!(
+            debug!(
                 target: "lightwatch::timeline",
                 "Phase {:?} entered on time at {:.1}s",
                 phase, elapsed
@@ -64,10 +64,10 @@ pub fn log_timeline_verification(
     if clock.elapsed() >= 143.0 && !verify.logged {
         verify.logged = true;
 
-        info!(target: "lightwatch::timeline", "=== Timeline Verification ===");
+        debug!(target: "lightwatch::timeline", "=== Timeline Verification ===");
         for (phase, time) in &verify.phases_entered {
-            info!(target: "lightwatch::timeline", "  {:?}: {:.1}s", phase, time);
+            debug!(target: "lightwatch::timeline", "  {:?}: {:.1}s", phase, time);
         }
-        info!(target: "lightwatch::timeline", "=== Experience Complete ===");
+        info!(target: "lightwatch::timeline", "Experience complete at {:.1}s", clock.elapsed());
     }
 }

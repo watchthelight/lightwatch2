@@ -25,6 +25,7 @@ pub enum AudioTrigger {
 
 /// Spatial data for a single audio source
 #[derive(Clone, Default)]
+#[allow(dead_code)]
 pub struct SpatialSourceData {
     pub gain: f32,
     pub pan: f32, // -1 left, +1 right
